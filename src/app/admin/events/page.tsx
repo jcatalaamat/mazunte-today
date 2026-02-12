@@ -1,8 +1,8 @@
 import { Header } from "@/components/header";
-import { getApprovedEvents, isAdminAuthenticated, toggleFeatured } from "@/actions/admin";
+import { getApprovedEvents, isAdminAuthenticated, boostEvent } from "@/actions/admin";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { categoryConfig, formatTime } from "@/lib/utils";
+import { categoryConfig, formatTime, isEventBoosted } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { LogoutButton } from "../logout-button";
 
@@ -21,10 +21,10 @@ export default async function AdminEventsPage() {
 
   const approvedEvents = await getApprovedEvents();
 
-  async function handleToggleFeatured(formData: FormData) {
+  async function handleBoost(formData: FormData) {
     "use server";
     const eventId = formData.get("eventId") as string;
-    await toggleFeatured(eventId);
+    await boostEvent(eventId, 24); // Boost for 24 hours
     revalidatePath("/admin/events");
   }
 
@@ -60,10 +60,13 @@ export default async function AdminEventsPage() {
             <div className="space-y-3">
               {approvedEvents.map((event) => {
                 const cat = categoryConfig[event.category] || categoryConfig.other;
+                const isBoosted = isEventBoosted(event.boostedUntil);
+                const boostEndsAt = event.boostedUntil ? new Date(event.boostedUntil) : null;
+
                 return (
                   <div
                     key={event.id}
-                    className="bg-cream rounded-xl p-5 border border-black/5"
+                    className={`bg-cream rounded-xl p-5 border ${isBoosted ? "border-sunset/30 ring-1 ring-sunset/20" : "border-black/5"}`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
@@ -71,9 +74,9 @@ export default async function AdminEventsPage() {
                           <span className={`inline-block text-[0.6rem] font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${cat.bgClass}`}>
                             {cat.label}
                           </span>
-                          {event.isFeatured && (
+                          {isBoosted && (
                             <span className="inline-block text-[0.6rem] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-sunset/10 text-sunset">
-                              Featured
+                              Boosted until {boostEndsAt?.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                             </span>
                           )}
                         </div>
@@ -85,17 +88,17 @@ export default async function AdminEventsPage() {
                         </div>
                       </div>
                       <div className="flex gap-2 flex-shrink-0">
-                        <form action={handleToggleFeatured}>
+                        <form action={handleBoost}>
                           <input type="hidden" name="eventId" value={event.id} />
                           <button
                             type="submit"
                             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
-                              event.isFeatured
+                              isBoosted
                                 ? "bg-sunset/10 text-sunset hover:bg-sunset/20"
                                 : "bg-black/5 text-text-soft hover:bg-black/10"
                             }`}
                           >
-                            {event.isFeatured ? "Unfeature" : "Feature"}
+                            {isBoosted ? "Remove Boost" : "Boost 24h"}
                           </button>
                         </form>
                         <Link

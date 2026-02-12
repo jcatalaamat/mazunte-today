@@ -64,6 +64,12 @@ export function formatTimeparts(time: string): { hour: string; period: string } 
   return { hour: `${displayHour}:${m}`, period };
 }
 
+/** Check if an event is currently boosted */
+export function isEventBoosted(boostedUntil: string | null): boolean {
+  if (!boostedUntil) return false;
+  return new Date(boostedUntil) > new Date();
+}
+
 /** Category display config */
 export const categoryConfig: Record<string, { label: string; emoji: string; colorClass: string; bgClass: string; gradClass: string }> = {
   yoga: { label: "Yoga", emoji: "🧘", colorClass: "text-ocean", bgClass: "bg-ocean-pale text-ocean", gradClass: "grad-yoga" },

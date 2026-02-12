@@ -66,6 +66,7 @@ export const events = pgTable(
       until: string;
     }>(),
     isFeatured: boolean("is_featured").notNull().default(false),
+    boostedUntil: timestamp("boosted_until", { mode: "string" }),
     isApproved: boolean("is_approved").notNull().default(false),
     contactWhatsapp: text("contact_whatsapp"),
     contactInstagram: text("contact_instagram"),

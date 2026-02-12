@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { events, eventOccurrences } from "@/db/schema";
-import { eq, and, gte, lte, sql, ilike, or } from "drizzle-orm";
+import { eq, and, gte, lte, sql, ilike, or, desc } from "drizzle-orm";
 import { getMazunteToday, getMazunteNow, getDateOffset } from "@/lib/utils";
 
 export type EventWithOccurrence = {
@@ -16,6 +16,7 @@ export type EventWithOccurrence = {
   startTime: string;
   endTime: string | null;
   isFeatured: boolean;
+  isBoosted: boolean;
   contactWhatsapp: string | null;
   contactInstagram: string | null;
   contactLink: string | null;
@@ -26,6 +27,9 @@ function mapRow(row: {
   occurrence: typeof eventOccurrences.$inferSelect;
   event: typeof events.$inferSelect;
 }): EventWithOccurrence {
+  const now = new Date().toISOString();
+  const isBoosted = row.event.boostedUntil ? row.event.boostedUntil > now : false;
+
   return {
     id: row.occurrence.id,
     eventId: row.event.id,
@@ -39,6 +43,7 @@ function mapRow(row: {
     startTime: row.occurrence.startTime,
     endTime: row.occurrence.endTime,
     isFeatured: row.event.isFeatured,
+    isBoosted,
     contactWhatsapp: row.event.contactWhatsapp,
     contactInstagram: row.event.contactInstagram,
     contactLink: row.event.contactLink,
@@ -111,26 +116,52 @@ export async function getThisWeekEvents(): Promise<EventWithOccurrence[]> {
   return rows.map(mapRow);
 }
 
-/** Get the featured event (if any) */
+/** Get the featured event - prioritizes boosted events, then falls back to auto-selection */
 export async function getFeaturedEvent(): Promise<EventWithOccurrence | null> {
   const today = getMazunteToday();
+  const now = new Date().toISOString();
 
-  const rows = await db
+  // First, try to find a currently boosted event
+  const boostedRows = await db
     .select({ occurrence: eventOccurrences, event: events })
     .from(eventOccurrences)
     .innerJoin(events, eq(eventOccurrences.eventId, events.id))
     .where(
       and(
-        eq(events.isFeatured, true),
+        gte(events.boostedUntil, now),
         eq(events.isApproved, true),
         eq(eventOccurrences.isCancelled, false),
         gte(eventOccurrences.date, today)
       )
     )
-    .orderBy(eventOccurrences.date)
+    .orderBy(desc(events.boostedUntil), eventOccurrences.date)
     .limit(1);
 
-  return rows.length > 0 ? mapRow(rows[0]) : null;
+  if (boostedRows.length > 0) {
+    return mapRow(boostedRows[0]);
+  }
+
+  // Fallback: auto-select the best upcoming event (with image, soonest date)
+  const autoRows = await db
+    .select({ occurrence: eventOccurrences, event: events })
+    .from(eventOccurrences)
+    .innerJoin(events, eq(eventOccurrences.eventId, events.id))
+    .where(
+      and(
+        eq(events.isApproved, true),
+        eq(eventOccurrences.isCancelled, false),
+        gte(eventOccurrences.date, today)
+      )
+    )
+    .orderBy(
+      // Prioritize events with images
+      sql`CASE WHEN jsonb_array_length(COALESCE(${events.images}, '[]'::jsonb)) > 0 THEN 0 ELSE 1 END`,
+      eventOccurrences.date,
+      eventOccurrences.startTime
+    )
+    .limit(1);
+
+  return autoRows.length > 0 ? mapRow(autoRows[0]) : null;
 }
 
 /** Get a single event by slug */

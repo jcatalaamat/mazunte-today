@@ -146,3 +146,35 @@ export async function toggleFeatured(eventId: string) {
   revalidatePath("/");
   revalidatePath("/admin");
 }
+
+/** Boost an event for 24 hours (or remove boost) */
+export async function boostEvent(eventId: string, hours: number = 24) {
+  const [event] = await db
+    .select()
+    .from(events)
+    .where(eq(events.id, eventId))
+    .limit(1);
+
+  if (!event) throw new Error("Event not found");
+
+  const now = new Date();
+  const isCurrentlyBoosted = event.boostedUntil && new Date(event.boostedUntil) > now;
+
+  let boostedUntil: string | null = null;
+
+  if (!isCurrentlyBoosted) {
+    // Boost for specified hours
+    const boostEnd = new Date(now.getTime() + hours * 60 * 60 * 1000);
+    boostedUntil = boostEnd.toISOString();
+  }
+  // If already boosted, remove the boost (set to null)
+
+  await db
+    .update(events)
+    .set({ boostedUntil, updatedAt: new Date().toISOString() })
+    .where(eq(events.id, eventId));
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+  revalidatePath("/admin/events");
+}
