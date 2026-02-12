@@ -82,8 +82,7 @@ export default async function VenuePage({ params }: { params: Promise<{ venue: s
                         className="flex items-center gap-4 p-4 rounded-xl bg-white border border-black/5 hover:shadow-sm transition-shadow"
                       >
                         <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0"
-                          style={{ backgroundColor: cat.bg }}
+                          className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 ${cat.bgClass}`}
                         >
                           {cat.emoji}
                         </div>

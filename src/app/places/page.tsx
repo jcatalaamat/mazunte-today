@@ -61,8 +61,7 @@ export default async function PlacesPage() {
                           className="flex items-center gap-4 p-3 -mx-3 rounded-xl hover:bg-black/[0.02] transition-colors"
                         >
                           <div
-                            className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
-                            style={{ backgroundColor: cat.bg }}
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ${cat.bgClass}`}
                           >
                             {cat.emoji}
                           </div>
