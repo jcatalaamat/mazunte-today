@@ -104,14 +104,17 @@ export async function getEventById(eventId: string) {
   return event || null;
 }
 
+type Category = "yoga" | "music" | "ceremony" | "food" | "wellness" | "community" | "market" | "other";
+
 export async function updateEvent(
   eventId: string,
   data: {
     title?: string;
-    description?: string;
-    category?: string;
-    venueName?: string;
-    organizerName?: string;
+    description?: string | null;
+    category?: Category;
+    venueName?: string | null;
+    mapsUrl?: string | null;
+    organizerName?: string | null;
     startTime?: string;
     endTime?: string | null;
     isFeatured?: boolean;

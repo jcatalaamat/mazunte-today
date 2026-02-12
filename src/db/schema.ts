@@ -22,28 +22,6 @@ export const categoryEnum = pgEnum("category", [
   "other",
 ]);
 
-// ── Venues ──────────────────────────────────────────────
-export const venues = pgTable(
-  "venues",
-  {
-    id: text("id").primaryKey(),
-    name: text("name").notNull(),
-    slug: text("slug").notNull(),
-    description: text("description"),
-    address: text("address"),
-    latitude: text("latitude"),
-    longitude: text("longitude"),
-    contactPhone: text("contact_phone"),
-    contactEmail: text("contact_email"),
-    website: text("website"),
-    instagram: text("instagram"),
-    createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
-  },
-  (table) => [
-    unique("venues_slug_unique").on(table.slug),
-  ]
-);
-
 // ── Events ──────────────────────────────────────────────
 export const events = pgTable(
   "events",
@@ -53,8 +31,9 @@ export const events = pgTable(
     slug: text("slug").notNull(),
     description: text("description"),
     category: categoryEnum("category").notNull().default("other"),
-    venueId: text("venue_id").references(() => venues.id),
     venueName: text("venue_name"),
+    placeId: text("place_id"), // Google Places ID for grouping
+    mapsUrl: text("maps_url"),
     organizerName: text("organizer_name"),
     organizerContact: text("organizer_contact"),
     date: date("date", { mode: "string" }),
@@ -82,6 +61,7 @@ export const events = pgTable(
     index("events_is_approved_idx").on(table.isApproved),
     index("events_is_featured_idx").on(table.isFeatured),
     index("events_start_time_idx").on(table.startTime),
+    index("events_place_id_idx").on(table.placeId),
   ]
 );
 

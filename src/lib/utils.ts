@@ -70,6 +70,97 @@ export function isEventBoosted(boostedUntil: string | null): boolean {
   return new Date(boostedUntil) > new Date();
 }
 
+/** Generate Google Calendar URL */
+export function getGoogleCalendarUrl(event: {
+  title: string;
+  description?: string | null;
+  date: string;
+  startTime: string;
+  endTime?: string | null;
+  venueName?: string | null;
+}): string {
+  // Format: YYYYMMDDTHHMMSS (local time, calendar will handle timezone)
+  const startDate = event.date.replace(/-/g, "");
+  const startTimeFormatted = event.startTime.replace(/:/g, "").slice(0, 4) + "00";
+
+  let endTimeFormatted: string;
+  if (event.endTime) {
+    endTimeFormatted = event.endTime.replace(/:/g, "").slice(0, 4) + "00";
+  } else {
+    // Default to 2 hours later
+    const [h, m] = event.startTime.split(":").map(Number);
+    const endHour = (h + 2) % 24;
+    endTimeFormatted = `${endHour.toString().padStart(2, "0")}${m.toString().padStart(2, "0")}00`;
+  }
+
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: event.title,
+    dates: `${startDate}T${startTimeFormatted}/${startDate}T${endTimeFormatted}`,
+    ctz: "America/Mexico_City",
+  });
+
+  if (event.description) {
+    params.set("details", event.description);
+  }
+  if (event.venueName) {
+    params.set("location", `${event.venueName}, Mazunte, Oaxaca, Mexico`);
+  }
+
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+/** Generate iCal file content */
+export function getICalContent(event: {
+  title: string;
+  description?: string | null;
+  date: string;
+  startTime: string;
+  endTime?: string | null;
+  venueName?: string | null;
+  slug: string;
+}): string {
+  const startDate = event.date.replace(/-/g, "");
+  const startTimeFormatted = event.startTime.replace(/:/g, "").slice(0, 4) + "00";
+
+  let endTimeFormatted: string;
+  if (event.endTime) {
+    endTimeFormatted = event.endTime.replace(/:/g, "").slice(0, 4) + "00";
+  } else {
+    const [h, m] = event.startTime.split(":").map(Number);
+    const endHour = (h + 2) % 24;
+    endTimeFormatted = `${endHour.toString().padStart(2, "0")}${m.toString().padStart(2, "0")}00`;
+  }
+
+  const uid = `${event.slug}-${event.date}@mazuntenow.com`;
+  const now = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Mazunte Now//Events//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    `UID:${uid}`,
+    `DTSTAMP:${now}`,
+    `DTSTART;TZID=America/Mexico_City:${startDate}T${startTimeFormatted}`,
+    `DTEND;TZID=America/Mexico_City:${startDate}T${endTimeFormatted}`,
+    `SUMMARY:${event.title}`,
+  ];
+
+  if (event.description) {
+    lines.push(`DESCRIPTION:${event.description.replace(/\n/g, "\\n")}`);
+  }
+  if (event.venueName) {
+    lines.push(`LOCATION:${event.venueName}, Mazunte, Oaxaca, Mexico`);
+  }
+
+  lines.push("END:VEVENT", "END:VCALENDAR");
+
+  return lines.join("\r\n");
+}
+
 /** Category display config */
 export const categoryConfig: Record<string, { label: string; emoji: string; colorClass: string; bgClass: string; gradClass: string }> = {
   yoga: { label: "Yoga", emoji: "🧘", colorClass: "text-ocean", bgClass: "bg-ocean-pale text-ocean", gradClass: "grad-yoga" },

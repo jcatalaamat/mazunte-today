@@ -4,6 +4,7 @@ import { useActionState, useState, useRef } from "react";
 import { submitEvent, type SubmitEventState } from "@/actions/submit";
 import { uploadImage } from "@/actions/upload";
 import Image from "next/image";
+import { PlacesAutocomplete, type PlaceResult } from "./places-autocomplete";
 
 const categories = [
   { value: "yoga", label: "Yoga" },
@@ -39,6 +40,7 @@ export function SubmitEventForm() {
   const [images, setImages] = useState<string[]>([]);
   const [imageUploading, setImageUploading] = useState(false);
   const [imageError, setImageError] = useState<string | null>(null);
+  const [selectedPlace, setSelectedPlace] = useState<PlaceResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -136,15 +138,23 @@ export function SubmitEventForm() {
         </select>
       </div>
 
-      {/* Venue */}
+      {/* Venue - Places Autocomplete */}
       <div>
-        <label className="block text-sm font-medium mb-1.5">Venue / Location *</label>
-        <input
-          name="venueName"
+        <label className="block text-sm font-medium mb-1.5">Where? *</label>
+        <PlacesAutocomplete
+          onPlaceSelect={setSelectedPlace}
+          placeholder="Search for a place in Mazunte..."
           required
-          className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
-          placeholder="e.g. Akasha, Punta Cometa, La Cosmica"
         />
+        {/* Hidden inputs to submit place data */}
+        <input type="hidden" name="venueName" value={selectedPlace?.name || ""} />
+        <input type="hidden" name="placeId" value={selectedPlace?.placeId || ""} />
+        <input type="hidden" name="mapsUrl" value={selectedPlace?.mapsUrl || ""} />
+        {selectedPlace && (
+          <p className="text-xs text-text-lighter mt-1.5">
+            {selectedPlace.address}
+          </p>
+        )}
       </div>
 
       {/* Description */}

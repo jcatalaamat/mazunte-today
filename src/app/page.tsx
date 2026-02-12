@@ -2,7 +2,7 @@ import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { HappeningNow } from "@/components/happening-now";
 import { CategoryFilter } from "@/components/category-pills";
-import { FeaturedEvent } from "@/components/featured-event";
+import { FeaturedEvents } from "@/components/featured-events";
 import { WeekGrid } from "@/components/week-grid";
 import { SubscribeForm } from "@/components/subscribe-form";
 import { SectionLabel } from "@/components/section-label";
@@ -11,18 +11,18 @@ import {
   getHappeningNow,
   getTodayEvents,
   getThisWeekEvents,
-  getFeaturedEvent,
+  getFeaturedEvents,
 } from "@/actions/events";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60;
 
 export default async function Home() {
-  const [happeningNow, todayEvents, weekEvents, featured] = await Promise.all([
+  const [happeningNow, todayEvents, weekEvents, featuredEvents] = await Promise.all([
     getHappeningNow(),
     getTodayEvents(),
     getThisWeekEvents(),
-    getFeaturedEvent(),
+    getFeaturedEvents(),
   ]);
 
   const hasNoEvents = todayEvents.length === 0 && weekEvents.length === 0;
@@ -52,7 +52,7 @@ export default async function Home() {
           <SectionLabel title="Today's Timeline" />
           <CategoryFilter events={todayEvents} />
 
-          <FeaturedEvent event={featured} />
+          <FeaturedEvents events={featuredEvents} />
           <WeekGrid events={weekEvents} />
         </>
       )}

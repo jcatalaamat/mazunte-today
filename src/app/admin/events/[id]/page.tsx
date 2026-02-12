@@ -28,11 +28,13 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
 
   async function handleUpdate(formData: FormData) {
     "use server";
+    type Category = "yoga" | "music" | "ceremony" | "food" | "wellness" | "community" | "market" | "other";
     const data = {
       title: formData.get("title") as string,
       description: (formData.get("description") as string) || null,
-      category: formData.get("category") as string,
+      category: formData.get("category") as Category,
       venueName: (formData.get("venueName") as string) || null,
+      mapsUrl: (formData.get("mapsUrl") as string) || null,
       organizerName: (formData.get("organizerName") as string) || null,
       startTime: formData.get("startTime") as string,
       endTime: (formData.get("endTime") as string) || null,
@@ -104,6 +106,20 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
                 defaultValue={event.venueName || ""}
                 className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.9rem] outline-none focus:border-ocean transition-colors"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Google Maps Link</label>
+              <input
+                type="url"
+                name="mapsUrl"
+                defaultValue={event.mapsUrl || ""}
+                placeholder="https://maps.google.com/..."
+                className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.9rem] outline-none focus:border-ocean transition-colors"
+              />
+              <p className="text-xs text-text-lighter mt-1">
+                Paste a Google Maps link to show a &quot;Get directions&quot; button
+              </p>
             </div>
 
             <div>

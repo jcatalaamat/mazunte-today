@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { categoryConfig, formatTime, getDayOfWeek } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import { AddToCalendar } from "@/components/add-to-calendar";
 
 export const dynamic = "force-dynamic";
 
@@ -114,6 +115,20 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
             )}
           </div>
 
+          {/* Maps link */}
+          {event.mapsUrl && (
+            <div className="mb-10">
+              <a
+                href={event.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/5 text-text font-medium text-sm hover:bg-black/10 transition-colors"
+              >
+                📍 Get directions
+              </a>
+            </div>
+          )}
+
           {(event.contactWhatsapp || event.contactInstagram || event.contactLink) && (
             <div className="flex flex-wrap gap-3 mb-10">
               {event.contactWhatsapp && (
@@ -152,21 +167,34 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           {upcomingOccurrences.length > 0 && (
             <div>
               <h2 className="font-serif text-xl mb-4">Upcoming Dates</h2>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {upcomingOccurrences.map((occ) => (
                   <div
                     key={occ.id}
-                    className="flex items-center gap-4 px-4 py-3 bg-cream rounded-xl"
+                    className="px-4 py-4 bg-cream rounded-xl"
                   >
-                    <div className="flex-1">
-                      <span className="font-medium">{getDayOfWeek(occ.date)}</span>
-                      <span className="text-text-soft mx-2">·</span>
-                      <span className="text-text-soft">{occ.date}</span>
+                    <div className="flex items-center justify-between gap-4 mb-3">
+                      <div>
+                        <span className="font-medium">{getDayOfWeek(occ.date)}</span>
+                        <span className="text-text-soft mx-2">·</span>
+                        <span className="text-text-soft">{occ.date}</span>
+                      </div>
+                      <div className="text-sm text-text-soft">
+                        {formatTime(occ.startTime)}
+                        {occ.endTime && ` – ${formatTime(occ.endTime)}`}
+                      </div>
                     </div>
-                    <div className="text-sm text-text-soft">
-                      {formatTime(occ.startTime)}
-                      {occ.endTime && ` – ${formatTime(occ.endTime)}`}
-                    </div>
+                    <AddToCalendar
+                      event={{
+                        title: event.title,
+                        description: event.description,
+                        date: occ.date,
+                        startTime: occ.startTime,
+                        endTime: occ.endTime,
+                        venueName: event.venueName,
+                        slug: event.slug,
+                      }}
+                    />
                   </div>
                 ))}
               </div>

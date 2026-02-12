@@ -116,12 +116,12 @@ export async function getThisWeekEvents(): Promise<EventWithOccurrence[]> {
   return rows.map(mapRow);
 }
 
-/** Get the featured event - prioritizes boosted events, then falls back to auto-selection */
-export async function getFeaturedEvent(): Promise<EventWithOccurrence | null> {
+/** Get featured events - returns all boosted events, or falls back to auto-selection */
+export async function getFeaturedEvents(): Promise<EventWithOccurrence[]> {
   const today = getMazunteToday();
   const now = new Date().toISOString();
 
-  // First, try to find a currently boosted event
+  // First, try to find all currently boosted events
   const boostedRows = await db
     .select({ occurrence: eventOccurrences, event: events })
     .from(eventOccurrences)
@@ -135,10 +135,10 @@ export async function getFeaturedEvent(): Promise<EventWithOccurrence | null> {
       )
     )
     .orderBy(desc(events.boostedUntil), eventOccurrences.date)
-    .limit(1);
+    .limit(5);
 
   if (boostedRows.length > 0) {
-    return mapRow(boostedRows[0]);
+    return boostedRows.map(mapRow);
   }
 
   // Fallback: auto-select the best upcoming event (with image, soonest date)
@@ -161,7 +161,7 @@ export async function getFeaturedEvent(): Promise<EventWithOccurrence | null> {
     )
     .limit(1);
 
-  return autoRows.length > 0 ? mapRow(autoRows[0]) : null;
+  return autoRows.map(mapRow);
 }
 
 /** Get a single event by slug */
