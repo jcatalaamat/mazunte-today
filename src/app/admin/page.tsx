@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Admin · Mazunte Now",
+  title: "Admin · Mazunte Today",
 };
 
 export const dynamic = "force-dynamic";

@@ -60,7 +60,7 @@ export default async function Home() {
       <SubscribeForm />
 
       <p className="text-[0.7rem] text-text-lighter px-6 pb-10 text-center">
-        Mazunte Now · Made with love on the Oaxacan coast
+        Mazunte Today · Made with love on the Oaxacan coast
       </p>
     </main>
   );

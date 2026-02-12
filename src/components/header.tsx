@@ -29,10 +29,16 @@ export function Header() {
           Mazunte
         </span>
         <span className="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-ocean bg-ocean-pale px-2 py-0.5 rounded">
-          Now
+          Today
         </span>
       </Link>
       <div className="flex items-center gap-4">
+        <Link
+          href="/places"
+          className="text-xs font-medium text-text-lighter hover:text-text-soft transition-colors"
+        >
+          Places
+        </Link>
         <Link
           href="/search"
           className="text-xs font-medium text-text-lighter hover:text-text-soft transition-colors"

@@ -30,7 +30,7 @@ export function SubscribeForm() {
     <section className="py-10 px-6 text-center border-t border-black/6 sm:py-12 sm:px-10">
       <h3 className="font-serif text-[1.4rem] mb-1.5">Never miss a moment</h3>
       <p className="text-[0.82rem] text-text-soft mb-5">
-        Get the weekly Mazunte Now digest every Monday morning.
+        Get the weekly Mazunte Today digest every Monday morning.
       </p>
       {submitted ? (
         <p className="text-ocean font-medium">You&apos;re in! See you Monday.</p>

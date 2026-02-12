@@ -138,7 +138,7 @@ export function getICalContent(event: {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Mazunte Now//Events//EN",
+    "PRODID:-//Mazunte Today//Events//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",

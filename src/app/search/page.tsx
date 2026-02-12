@@ -4,7 +4,7 @@ import { categoryConfig, formatTime, getDayOfWeek } from "@/lib/utils";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Search · Mazunte Now",
+  title: "Search · Mazunte Today",
 };
 
 export const dynamic = "force-dynamic";

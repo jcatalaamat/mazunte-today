@@ -224,3 +224,93 @@ export async function searchEvents(query: string): Promise<EventWithOccurrence[]
 
   return rows.map(mapRow);
 }
+
+export type VenueWithEvents = {
+  venueName: string;
+  placeId: string | null;
+  mapsUrl: string | null;
+  eventCount: number;
+  upcomingEvents: EventWithOccurrence[];
+};
+
+/** Get all venues with their upcoming events */
+export async function getVenuesWithEvents(): Promise<VenueWithEvents[]> {
+  const today = getMazunteToday();
+
+  // Get all approved events with upcoming occurrences
+  const rows = await db
+    .select({ occurrence: eventOccurrences, event: events })
+    .from(eventOccurrences)
+    .innerJoin(events, eq(eventOccurrences.eventId, events.id))
+    .where(
+      and(
+        eq(events.isApproved, true),
+        eq(eventOccurrences.isCancelled, false),
+        gte(eventOccurrences.date, today)
+      )
+    )
+    .orderBy(eventOccurrences.date, eventOccurrences.startTime);
+
+  // Group by venue (placeId if available, otherwise venueName)
+  const venueMap = new Map<string, VenueWithEvents>();
+
+  for (const row of rows) {
+    const venueKey = row.event.placeId || row.event.venueName || "Unknown";
+
+    if (!venueMap.has(venueKey)) {
+      venueMap.set(venueKey, {
+        venueName: row.event.venueName || "Unknown",
+        placeId: row.event.placeId,
+        mapsUrl: row.event.mapsUrl,
+        eventCount: 0,
+        upcomingEvents: [],
+      });
+    }
+
+    const venue = venueMap.get(venueKey)!;
+    venue.eventCount++;
+    if (venue.upcomingEvents.length < 5) {
+      venue.upcomingEvents.push(mapRow(row));
+    }
+  }
+
+  // Sort by event count (most active venues first)
+  return Array.from(venueMap.values()).sort((a, b) => b.eventCount - a.eventCount);
+}
+
+/** Get events for a specific venue by placeId or venueName */
+export async function getEventsByVenue(venueKey: string): Promise<{
+  venueName: string;
+  placeId: string | null;
+  mapsUrl: string | null;
+  events: EventWithOccurrence[];
+} | null> {
+  const today = getMazunteToday();
+
+  const rows = await db
+    .select({ occurrence: eventOccurrences, event: events })
+    .from(eventOccurrences)
+    .innerJoin(events, eq(eventOccurrences.eventId, events.id))
+    .where(
+      and(
+        eq(events.isApproved, true),
+        eq(eventOccurrences.isCancelled, false),
+        gte(eventOccurrences.date, today),
+        or(
+          eq(events.placeId, venueKey),
+          eq(events.venueName, venueKey)
+        )
+      )
+    )
+    .orderBy(eventOccurrences.date, eventOccurrences.startTime)
+    .limit(50);
+
+  if (rows.length === 0) return null;
+
+  return {
+    venueName: rows[0].event.venueName || "Unknown",
+    placeId: rows[0].event.placeId,
+    mapsUrl: rows[0].event.mapsUrl,
+    events: rows.map(mapRow),
+  };
+}

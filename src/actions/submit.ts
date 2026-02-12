@@ -149,6 +149,6 @@ export async function submitEvent(
 
   return {
     success: true,
-    message: "Event submitted! It will appear on Mazunte Now once approved.",
+    message: "Event submitted! It will appear on Mazunte Today once approved.",
   };
 }

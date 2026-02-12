@@ -391,7 +391,7 @@ export function SubmitEventForm() {
       </button>
 
       <p className="text-xs text-text-lighter text-center">
-        Events are reviewed before appearing on Mazunte Now.
+        Events are reviewed before appearing on Mazunte Today.
       </p>
     </form>
   );

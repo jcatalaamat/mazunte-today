@@ -11,10 +11,10 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const result = await getEventBySlug(slug);
-  if (!result) return { title: "Event Not Found · Mazunte Now" };
+  if (!result) return { title: "Event Not Found · Mazunte Today" };
 
   return {
-    title: `${result.event.title} · Mazunte Now`,
+    title: `${result.event.title} · Mazunte Today`,
     description: result.event.description || `${result.event.title} in Mazunte`,
   };
 }
