@@ -33,7 +33,7 @@ export default async function AdminEventsPage() {
       <Header />
       <section className="px-6 py-12 sm:px-10">
         <div className="max-w-3xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div>
               <h1 className="font-serif text-2xl mb-1">Manage Events</h1>
               <p className="text-text-soft text-sm">
@@ -68,9 +68,9 @@ export default async function AdminEventsPage() {
                     key={event.id}
                     className={`bg-cream rounded-xl p-5 border ${isBoosted ? "border-sunset/30 ring-1 ring-sunset/20" : "border-black/5"}`}
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
+                    <div className="space-y-3">
+                      <div>
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
                           <span className={`inline-block text-[0.6rem] font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${cat.bgClass}`}>
                             {cat.label}
                           </span>
@@ -87,7 +87,7 @@ export default async function AdminEventsPage() {
                           {event.isRecurring && <span>🔄 Recurring</span>}
                         </div>
                       </div>
-                      <div className="flex gap-2 flex-shrink-0">
+                      <div className="flex gap-2">
                         <form action={handleBoost}>
                           <input type="hidden" name="eventId" value={event.id} />
                           <button

@@ -57,7 +57,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
 
               {/* Additional images grid */}
               {(event.images as string[]).length > 1 && (
-                <div className="grid grid-cols-4 gap-2 mt-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
                   {(event.images as string[]).slice(1).map((img, index) => (
                     <div key={img} className="relative aspect-square rounded-lg overflow-hidden">
                       <Image
@@ -173,7 +173,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                     key={occ.id}
                     className="px-4 py-4 bg-cream rounded-xl"
                   >
-                    <div className="flex items-center justify-between gap-4 mb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 mb-3">
                       <div>
                         <span className="font-medium">{getDayOfWeek(occ.date)}</span>
                         <span className="text-text-soft mx-2">·</span>
