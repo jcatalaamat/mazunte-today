@@ -16,7 +16,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Mazunte Today",
+  title: "Mazunte Connect",
   description:
     "The living pulse of Mazunte. Events, ceremonies, classes, food & community — all in one place.",
 };

@@ -11,10 +11,10 @@ export async function generateMetadata({ params }: { params: Promise<{ venue: st
   const decodedVenue = decodeURIComponent(venue);
   const result = await getEventsByVenue(decodedVenue);
 
-  if (!result) return { title: "Venue Not Found · Mazunte Today" };
+  if (!result) return { title: "Venue Not Found · Mazunte Connect" };
 
   return {
-    title: `${result.venueName} · Mazunte Today`,
+    title: `${result.venueName} · Mazunte Connect`,
     description: `Events at ${result.venueName} in Mazunte`,
   };
 }

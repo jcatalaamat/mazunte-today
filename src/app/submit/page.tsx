@@ -2,8 +2,8 @@ import { Header } from "@/components/header";
 import { SubmitEventForm } from "@/components/submit-event-form";
 
 export const metadata = {
-  title: "Submit Event · Mazunte Today",
-  description: "List your event, class, or ceremony on Mazunte Today.",
+  title: "Submit Event · Mazunte Connect",
+  description: "List your event, class, or ceremony on Mazunte Connect.",
 };
 
 export default function SubmitPage() {

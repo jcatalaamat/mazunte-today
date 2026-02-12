@@ -6,7 +6,7 @@ import { categoryConfig, formatTime, getDayOfWeek } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Places · Mazunte Today",
+  title: "Places · Mazunte Connect",
   description: "Discover venues and spaces hosting events in Mazunte",
 };
 

@@ -31,7 +31,7 @@ export function Header() {
             Mazunte
           </span>
           <span className="font-sans text-[0.6rem] sm:text-xs font-semibold uppercase tracking-[0.15em] text-ocean bg-ocean-pale px-1.5 sm:px-2 py-0.5 rounded">
-            Today
+            Connect
           </span>
         </Link>
 

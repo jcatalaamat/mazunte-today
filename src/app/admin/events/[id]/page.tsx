@@ -5,7 +5,7 @@ import Link from "next/link";
 import { categoryConfig } from "@/lib/utils";
 
 export const metadata = {
-  title: "Edit Event · Mazunte Today",
+  title: "Edit Event · Mazunte Connect",
 };
 
 export const dynamic = "force-dynamic";

@@ -11,7 +11,7 @@ const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql, { schema });
 
 async function seed() {
-  console.log("Seeding Mazunte Today...");
+  console.log("Seeding Mazunte Connect...");
 
   // ── Today's date + helpers ────────────────────────
   const today = new Date().toISOString().split("T")[0];
