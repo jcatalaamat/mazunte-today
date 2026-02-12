@@ -65,18 +65,29 @@ export function PlacesAutocomplete({
     };
   }, []);
 
+  // Initialize autocomplete only after 3+ characters
   useEffect(() => {
-    if (!isLoaded || !inputRef.current || autocompleteRef.current) return;
+    if (!isLoaded || !inputRef.current) return;
+    if (inputValue.length < 3) {
+      // Clean up existing autocomplete if input is too short
+      if (autocompleteRef.current) {
+        google.maps.event.clearInstanceListeners(autocompleteRef.current);
+        autocompleteRef.current = null;
+      }
+      return;
+    }
+    if (autocompleteRef.current) return; // Already initialized
 
-    // Bias towards Mazunte area but don't restrict
-    const mazunteBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(15.55, -96.65),
-      new google.maps.LatLng(15.75, -96.45)
-    );
+    // Mazunte center coordinates
+    const mazunteCenter = new google.maps.LatLng(15.6667, -96.5533);
 
     const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
       types: ["establishment", "geocode"],
-      bounds: mazunteBounds,
+      // Restrict to ~30km radius around Mazunte (covers Zipolite, San Agustinillo, Puerto Angel)
+      locationBias: {
+        center: mazunteCenter,
+        radius: 30000, // 30km
+      },
       fields: ["place_id", "name", "formatted_address", "geometry", "url"],
     });
 
@@ -96,7 +107,7 @@ export function PlacesAutocomplete({
     });
 
     autocompleteRef.current = autocomplete;
-  }, [isLoaded, onPlaceSelect]);
+  }, [isLoaded, inputValue.length >= 3, onPlaceSelect]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
