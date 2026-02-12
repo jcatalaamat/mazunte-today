@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 export type PlaceResult = {
   placeId: string;
@@ -34,6 +34,11 @@ export function PlacesAutocomplete({
   const [isLoaded, setIsLoaded] = useState(false);
   const [inputValue, setInputValue] = useState(defaultValue);
 
+  // Stable callback ref
+  const onPlaceSelectRef = useRef(onPlaceSelect);
+  onPlaceSelectRef.current = onPlaceSelect;
+
+  // Load Google Maps script
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -45,6 +50,13 @@ export function PlacesAutocomplete({
     // Check if already loaded
     if (window.google?.maps?.places) {
       setIsLoaded(true);
+      return;
+    }
+
+    // Check if script is already loading
+    const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
+    if (existingScript) {
+      existingScript.addEventListener("load", () => setIsLoaded(true));
       return;
     }
 
@@ -65,18 +77,9 @@ export function PlacesAutocomplete({
     };
   }, []);
 
-  // Initialize autocomplete only after 3+ characters
+  // Initialize autocomplete once when loaded
   useEffect(() => {
-    if (!isLoaded || !inputRef.current) return;
-    if (inputValue.length < 3) {
-      // Clean up existing autocomplete if input is too short
-      if (autocompleteRef.current) {
-        google.maps.event.clearInstanceListeners(autocompleteRef.current);
-        autocompleteRef.current = null;
-      }
-      return;
-    }
-    if (autocompleteRef.current) return; // Already initialized
+    if (!isLoaded || !inputRef.current || autocompleteRef.current) return;
 
     // Oaxacan coast bounds - covers Mazunte, Zipolite, San Agustinillo, Puerto Angel, Puerto Escondido
     const oaxacaCoastBounds = new google.maps.LatLngBounds(
@@ -102,20 +105,20 @@ export function PlacesAutocomplete({
           mapsUrl: place.url || `https://www.google.com/maps/place/?q=place_id:${place.place_id}`,
         };
         setInputValue(place.name || "");
-        onPlaceSelect(result);
+        onPlaceSelectRef.current(result);
       }
     });
 
     autocompleteRef.current = autocomplete;
-  }, [isLoaded, inputValue.length >= 3, onPlaceSelect]);
+  }, [isLoaded]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    // Clear selection if user modifies text
+    // Clear selection if user clears input
     if (e.target.value === "") {
-      onPlaceSelect(null);
+      onPlaceSelectRef.current(null);
     }
-  };
+  }, []);
 
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -143,6 +146,7 @@ export function PlacesAutocomplete({
       placeholder={isLoaded ? placeholder : "Loading..."}
       disabled={!isLoaded}
       required={required}
+      autoComplete="off"
       className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors disabled:opacity-50"
     />
   );
