@@ -1,26 +1,78 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --sand: #F5EDE3;
+  --sand-dark: #E8DDD0;
+  --ocean: #2B6B7F;
+  --ocean-light: #3A8FA6;
+  --ocean-pale: #D5EEF4;
+  --sunset: #E8724A;
+  --sunset-light: #F4A261;
+  --jungle: #4A7C59;
+  --jungle-light: #6BA368;
+  --night: #1A2332;
+  --night-soft: #2C3E50;
+  --cream: #FFFCF7;
+  --text: #2C2418;
+  --text-soft: #6B5D4F;
+  --text-lighter: #9B8E7E;
+  --coral: #E07A5F;
+  --plum: #8B5E83;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-sand: var(--sand);
+  --color-sand-dark: var(--sand-dark);
+  --color-ocean: var(--ocean);
+  --color-ocean-light: var(--ocean-light);
+  --color-ocean-pale: var(--ocean-pale);
+  --color-sunset: var(--sunset);
+  --color-sunset-light: var(--sunset-light);
+  --color-jungle: var(--jungle);
+  --color-jungle-light: var(--jungle-light);
+  --color-night: var(--night);
+  --color-night-soft: var(--night-soft);
+  --color-cream: var(--cream);
+  --color-text: var(--text);
+  --color-text-soft: var(--text-soft);
+  --color-text-lighter: var(--text-lighter);
+  --color-coral: var(--coral);
+  --color-plum: var(--plum);
+  --font-serif: 'Instrument Serif', serif;
+  --font-sans: 'DM Sans', sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--sand);
+  color: var(--text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
+
+/* Scrollbar hiding for horizontal scrolls */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { scrollbar-width: none; }
+
+/* Pulse animation for live dots */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(106, 163, 104, 0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(106, 163, 104, 0); }
+}
+.animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+/* Fade up animation */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fade-up 0.6s ease both; }
+
+/* Gradient backgrounds for category cards */
+.grad-yoga { background: linear-gradient(135deg, #2B6B7F 0%, #3A8FA6 50%, #D5EEF4 100%); }
+.grad-music { background: linear-gradient(135deg, #E8724A 0%, #F4A261 50%, #FDE8DB 100%); }
+.grad-ceremony { background: linear-gradient(135deg, #8B5E83 0%, #B07AAB 50%, #F0E0ED 100%); }
+.grad-food { background: linear-gradient(135deg, #E07A5F 0%, #F4A261 50%, #FDE8E0 100%); }
+.grad-wellness { background: linear-gradient(135deg, #4A7C59 0%, #6BA368 50%, #E0F0E4 100%); }
+.grad-community { background: linear-gradient(135deg, #3A8FA6 0%, #5BB5CC 50%, #D5EEF4 100%); }
+.grad-market { background: linear-gradient(135deg, #F4A261 0%, #E8B87A 50%, #FDF0DB 100%); }
