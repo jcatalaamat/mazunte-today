@@ -54,7 +54,13 @@ export default async function AdminPage() {
                 href="/admin/events"
                 className="text-sm text-ocean hover:text-ocean/80 transition-colors"
               >
-                All Events →
+                Events →
+              </Link>
+              <Link
+                href="/admin/subscribers"
+                className="text-sm text-ocean hover:text-ocean/80 transition-colors"
+              >
+                Subscribers →
               </Link>
               <LogoutButton />
             </div>

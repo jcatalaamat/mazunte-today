@@ -1,8 +1,8 @@
 "use server";
 
 import { db } from "@/db";
-import { events, eventOccurrences } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { events, eventOccurrences, subscribers } from "@/db/schema";
+import { eq, desc } from "drizzle-orm";
 import { expandRecurrence } from "@/lib/recurrence";
 import { getMazunteToday } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
@@ -191,4 +191,18 @@ export async function boostEvent(eventId: string, hours: number = 24) {
   revalidatePath("/");
   revalidatePath("/admin");
   revalidatePath("/admin/events");
+}
+
+/** Get all subscribers */
+export async function getSubscribers() {
+  return db
+    .select()
+    .from(subscribers)
+    .orderBy(desc(subscribers.createdAt));
+}
+
+/** Delete a subscriber */
+export async function deleteSubscriber(id: string) {
+  await db.delete(subscribers).where(eq(subscribers.id, id));
+  revalidatePath("/admin/subscribers");
 }
