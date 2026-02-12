@@ -1,8 +1,9 @@
 import { Header } from "@/components/header";
-import { getPendingEvents, isAdminAuthenticated, verifyAdminPassword } from "@/actions/admin";
+import { getPendingEvents, isAdminAuthenticated, verifyAdminPassword, deleteAllEvents } from "@/actions/admin";
 import { AdminEventList } from "./admin-event-list";
 import { AdminLogin } from "./admin-login";
 import { LogoutButton } from "./logout-button";
+import { DeleteAllButton } from "./delete-all-button";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
@@ -67,6 +68,14 @@ export default async function AdminPage() {
           ) : (
             <AdminEventList events={pending} />
           )}
+
+          <div className="mt-16 pt-8 border-t border-black/10">
+            <h2 className="font-serif text-lg mb-2 text-red-600">Danger Zone</h2>
+            <p className="text-sm text-text-soft mb-4">
+              Delete all events and occurrences. This cannot be undone.
+            </p>
+            <DeleteAllButton onDelete={async () => { "use server"; await deleteAllEvents(); redirect("/admin"); }} />
+          </div>
         </div>
       </section>
     </main>

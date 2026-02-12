@@ -150,6 +150,17 @@ export async function toggleFeatured(eventId: string) {
   revalidatePath("/admin");
 }
 
+/** Delete all events and occurrences (wipe seeded data) */
+export async function deleteAllEvents() {
+  await db.delete(eventOccurrences);
+  await db.delete(events);
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+  revalidatePath("/admin/events");
+  revalidatePath("/places");
+}
+
 /** Boost an event for 24 hours (or remove boost) */
 export async function boostEvent(eventId: string, hours: number = 24) {
   const [event] = await db
