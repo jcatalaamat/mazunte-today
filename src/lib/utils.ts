@@ -46,6 +46,12 @@ export function getDayOfWeek(dateStr: string): string {
   return d.toLocaleDateString("en-US", { weekday: "long" });
 }
 
+/** Format date string to display format (e.g. "2026-02-12" → "Wednesday, Feb 12") */
+export function formatDate(dateStr: string): string {
+  const d = new Date(dateStr + "T12:00:00");
+  return d.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
+}
+
 /** Format time string to display format (e.g. "14:00:00" → "2:00 PM") */
 export function formatTime(time: string): string {
   const [h, m] = time.split(":");
