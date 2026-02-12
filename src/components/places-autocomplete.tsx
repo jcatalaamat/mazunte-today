@@ -78,16 +78,16 @@ export function PlacesAutocomplete({
     }
     if (autocompleteRef.current) return; // Already initialized
 
-    // Mazunte center coordinates
-    const mazunteCenter = new google.maps.LatLng(15.6667, -96.5533);
+    // Oaxacan coast bounds - covers Mazunte, Zipolite, San Agustinillo, Puerto Angel, Puerto Escondido
+    const oaxacaCoastBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(15.50, -97.10), // SW corner (Puerto Escondido area)
+      new google.maps.LatLng(15.90, -96.40)  // NE corner (past Puerto Angel)
+    );
 
     const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
       types: ["establishment", "geocode"],
-      // Restrict to ~30km radius around Mazunte (covers Zipolite, San Agustinillo, Puerto Angel)
-      locationBias: {
-        center: mazunteCenter,
-        radius: 30000, // 30km
-      },
+      bounds: oaxacaCoastBounds,
+      strictBounds: true, // Only return results within bounds
       fields: ["place_id", "name", "formatted_address", "geometry", "url"],
     });
 
