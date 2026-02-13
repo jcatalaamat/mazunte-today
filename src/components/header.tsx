@@ -59,6 +59,12 @@ export function Header() {
             {t("search")}
           </Link>
           <Link
+            href="/about"
+            className="text-xs font-medium text-text-lighter hover:text-text-soft transition-colors"
+          >
+            {t("about")}
+          </Link>
+          <Link
             href="/submit"
             className="text-xs font-semibold uppercase tracking-wide text-ocean hover:text-ocean/80 transition-colors"
           >

@@ -81,17 +81,17 @@ export function PlacesAutocomplete({
   useEffect(() => {
     if (!isLoaded || !inputRef.current || autocompleteRef.current) return;
 
-    // Oaxacan coast bounds - covers Mazunte, Zipolite, San Agustinillo, Puerto Angel, Puerto Escondido
-    const oaxacaCoastBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(15.50, -97.10), // SW corner (Puerto Escondido area)
-      new google.maps.LatLng(15.90, -96.40)  // NE corner (past Puerto Angel)
+    // Tight bounds: Mazunte, Zipolite, San Agustinillo, Ventanilla, La Barra, Zapotal
+    const localBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(15.635, -96.595), // SW corner (past Zipolite beach)
+      new google.maps.LatLng(15.695, -96.49)   // NE corner (Ventanilla/Zapotal)
     );
 
     const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
-      types: ["establishment", "geocode"],
-      bounds: oaxacaCoastBounds,
-      strictBounds: true, // Only return results within bounds
-      fields: ["place_id", "name", "formatted_address", "geometry", "url"],
+      types: ["establishment"],
+      bounds: localBounds,
+      strictBounds: true,
+      fields: ["place_id", "name", "formatted_address", "url"],
     });
 
     autocomplete.addListener("place_changed", () => {
