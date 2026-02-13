@@ -1,15 +1,19 @@
 import { type EventWithOccurrence } from "@/actions/events";
 import { categoryConfig, formatTime } from "@/lib/utils";
 import { SectionLabel } from "./section-label";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 
-export function HappeningNow({ events }: { events: EventWithOccurrence[] }) {
+export async function HappeningNow({ events }: { events: EventWithOccurrence[] }) {
   if (events.length === 0) return null;
+
+  const t = await getTranslations("happeningNow");
+  const tc = await getTranslations("categories");
 
   return (
     <>
-      <SectionLabel title="Happening Now" />
+      <SectionLabel title={t("title")} />
       <div className="flex gap-3.5 px-6 pb-8 overflow-x-auto snap-x snap-mandatory hide-scrollbar sm:px-10">
         {events.map((event, i) => {
           const cat = categoryConfig[event.category] || categoryConfig.other;
@@ -38,12 +42,12 @@ export function HappeningNow({ events }: { events: EventWithOccurrence[] }) {
                 )}
                 <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-md text-white text-[0.68rem] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-md">
                   <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse-dot" />
-                  Live
+                  {t("live")}
                 </div>
               </div>
               <div className="p-4">
                 <p className={`text-[0.65rem] font-semibold uppercase tracking-wider mb-1.5 ${cat.colorClass}`}>
-                  {cat.label}
+                  {tc(event.category)}
                 </p>
                 <h3 className="font-serif text-lg leading-tight mb-2">
                   {event.title}

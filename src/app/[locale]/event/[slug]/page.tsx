@@ -2,16 +2,22 @@ import { Header } from "@/components/header";
 import { getEventBySlug } from "@/actions/events";
 import { notFound } from "next/navigation";
 import { categoryConfig, formatTime, getDayOfWeek } from "@/lib/utils";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { AddToCalendar } from "@/components/add-to-calendar";
+import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}) {
+  const { slug, locale } = await params;
   const result = await getEventBySlug(slug);
-  if (!result) return { title: "Event Not Found · Mazunte Connect" };
+  const t = await getTranslations({ locale, namespace: "metadata" });
+  if (!result) return { title: t("eventNotFound") };
 
   return {
     title: `${result.event.title} · Mazunte Connect`,
@@ -19,7 +25,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function EventPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function EventPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const result = await getEventBySlug(slug);
 
@@ -29,6 +39,8 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
 
   const { event, upcomingOccurrences } = result;
   const cat = categoryConfig[event.category] || categoryConfig.other;
+  const t = await getTranslations("event");
+  const tc = await getTranslations("categories");
 
   return (
     <main className="min-h-screen">
@@ -39,12 +51,11 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
             href="/"
             className="inline-flex items-center gap-1 text-sm text-text-soft hover:text-text mb-6 transition-colors"
           >
-            ← Back to events
+            {t("backToEvents")}
           </Link>
 
           {event.images && (event.images as string[]).length > 0 && (
             <div className="mb-6">
-              {/* Main cover image */}
               <div className="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden">
                 <Image
                   src={(event.images as string[])[0]}
@@ -55,7 +66,6 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                 />
               </div>
 
-              {/* Additional images grid */}
               {(event.images as string[]).length > 1 && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
                   {(event.images as string[]).slice(1).map((img, index) => (
@@ -74,7 +84,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           )}
 
           <span className={`inline-block text-xs font-semibold uppercase tracking-wider px-2.5 py-1 rounded mb-4 ${cat.bgClass}`}>
-            {cat.emoji} {cat.label}
+            {cat.emoji} {tc(event.category)}
           </span>
 
           <h1 className="font-serif text-[clamp(1.8rem,5vw,2.8rem)] leading-tight mb-4">
@@ -110,12 +120,11 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
             {event.isRecurring && (
               <div className="flex items-center gap-3 text-text">
                 <span className="text-lg">🔄</span>
-                <span>Recurring event</span>
+                <span>{t("recurringEvent")}</span>
               </div>
             )}
           </div>
 
-          {/* Maps link */}
           {event.mapsUrl && (
             <div className="mb-10">
               <a
@@ -124,7 +133,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/5 text-text font-medium text-sm hover:bg-black/10 transition-colors"
               >
-                📍 Get directions
+                📍 {t("getDirections")}
               </a>
             </div>
           )}
@@ -138,7 +147,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#25D366] text-white font-medium text-sm hover:opacity-90 transition-opacity"
                 >
-                  WhatsApp
+                  {t("whatsapp")}
                 </a>
               )}
               {event.contactInstagram && (
@@ -148,7 +157,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white font-medium text-sm hover:opacity-90 transition-opacity"
                 >
-                  Instagram
+                  {t("instagram")}
                 </a>
               )}
               {event.contactLink && (
@@ -158,7 +167,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-ocean text-white font-medium text-sm hover:opacity-90 transition-opacity"
                 >
-                  Book / More Info
+                  {t("bookMoreInfo")}
                 </a>
               )}
             </div>
@@ -166,7 +175,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
 
           {upcomingOccurrences.length > 0 && (
             <div>
-              <h2 className="font-serif text-xl mb-4">Upcoming Dates</h2>
+              <h2 className="font-serif text-xl mb-4">{t("upcomingDates")}</h2>
               <div className="space-y-3">
                 {upcomingOccurrences.map((occ) => (
                   <div

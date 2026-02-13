@@ -1,7 +1,10 @@
+"use client";
+
 import { type EventWithOccurrence } from "@/actions/events";
 import { categoryConfig, formatTimeparts } from "@/lib/utils";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const categoryColors: Record<string, { dot: string; line: string; bg: string }> = {
   yoga: { dot: "border-ocean", line: "bg-ocean", bg: "bg-ocean-pale" },
@@ -15,11 +18,14 @@ const categoryColors: Record<string, { dot: string; line: string; bg: string }> 
 };
 
 export function Timeline({ events }: { events: EventWithOccurrence[] }) {
+  const t = useTranslations("timeline");
+  const tc = useTranslations("categories");
+
   if (events.length === 0) {
     return (
       <div className="px-6 pb-10 sm:px-10">
         <p className="text-center text-text-lighter py-8">
-          No events found for this category today.
+          {t("noEvents")}
         </p>
       </div>
     );
@@ -63,7 +69,7 @@ export function Timeline({ events }: { events: EventWithOccurrence[] }) {
             <div className="flex-1 min-w-0 flex gap-4">
               <div className="flex-1 min-w-0">
                 <p className={`text-[0.62rem] font-semibold uppercase tracking-wider mb-0.5 ${cat.colorClass}`}>
-                  {cat.label}
+                  {tc(event.category)}
                 </p>
                 <h4 className="font-serif text-[1.08rem] leading-tight mb-1">
                   {event.title}

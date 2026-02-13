@@ -2,26 +2,27 @@
 
 import { type EventWithOccurrence } from "@/actions/events";
 import { formatTime, getDayOfWeek } from "@/lib/utils";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
-function getRelativeLabel(dateStr: string): string {
+function getRelativeLabel(dateStr: string, t: (key: string) => string): string {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const eventDate = new Date(dateStr + "T00:00:00");
   const diffDays = Math.floor((eventDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
-  if (diffDays === 0) return "Today";
-  if (diffDays === 1) return "Tomorrow";
-  if (diffDays <= 7) return "This Week";
-  if (diffDays <= 14) return "Next Week";
-  return "Coming Soon";
+  if (diffDays === 0) return t("today");
+  if (diffDays === 1) return t("tomorrow");
+  if (diffDays <= 7) return t("thisWeek");
+  if (diffDays <= 14) return t("nextWeek");
+  return t("comingSoon");
 }
 
-function FeaturedCard({ event }: { event: EventWithOccurrence }) {
+function FeaturedCard({ event, t }: { event: EventWithOccurrence; t: (key: string) => string }) {
   const dayName = getDayOfWeek(event.date);
-  const relativeLabel = getRelativeLabel(event.date);
+  const relativeLabel = getRelativeLabel(event.date, t);
   const hasImage = event.images.length > 0;
 
   return (
@@ -68,6 +69,7 @@ function FeaturedCard({ event }: { event: EventWithOccurrence }) {
 
 export function FeaturedEvents({ events }: { events: EventWithOccurrence[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const t = useTranslations("featured");
 
   if (events.length === 0) return null;
 
@@ -75,7 +77,7 @@ export function FeaturedEvents({ events }: { events: EventWithOccurrence[] }) {
   if (events.length === 1) {
     return (
       <div className="mx-6 mb-10 animate-fade-up sm:mx-10">
-        <FeaturedCard event={events[0]} />
+        <FeaturedCard event={events[0]} t={t} />
       </div>
     );
   }
@@ -89,7 +91,7 @@ export function FeaturedEvents({ events }: { events: EventWithOccurrence[] }) {
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {events.map((event) => (
-            <FeaturedCard key={event.id} event={event} />
+            <FeaturedCard key={event.id} event={event} t={t} />
           ))}
         </div>
       </div>
@@ -103,7 +105,7 @@ export function FeaturedEvents({ events }: { events: EventWithOccurrence[] }) {
             className={`w-2 h-2 rounded-full transition-colors ${
               idx === currentIndex ? "bg-ocean" : "bg-black/20"
             }`}
-            aria-label={`Go to slide ${idx + 1}`}
+            aria-label={t("goToSlide", { number: idx + 1 })}
           />
         ))}
       </div>
@@ -115,13 +117,13 @@ export function FeaturedEvents({ events }: { events: EventWithOccurrence[] }) {
             onClick={() => setCurrentIndex((i) => (i === 0 ? events.length - 1 : i - 1))}
             className="px-3 py-1.5 rounded-lg bg-black/5 text-text-soft text-sm hover:bg-black/10 transition-colors"
           >
-            ← Prev
+            {t("prev")}
           </button>
           <button
             onClick={() => setCurrentIndex((i) => (i === events.length - 1 ? 0 : i + 1))}
             className="px-3 py-1.5 rounded-lg bg-black/5 text-text-soft text-sm hover:bg-black/10 transition-colors"
           >
-            Next →
+            {t("next")}
           </button>
         </div>
       )}

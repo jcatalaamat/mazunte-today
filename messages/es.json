@@ -1,0 +1,150 @@
+{
+  "header": {
+    "places": "Lugares",
+    "search": "Buscar",
+    "addEvent": "+ Agregar Evento"
+  },
+  "hero": {
+    "whatsHappening": "Que esta pasando",
+    "rightNow": "ahora mismo",
+    "description": "El pulso vivo de Mazunte. Eventos, ceremonias, clases, comida y comunidad — todo en un solo lugar."
+  },
+  "home": {
+    "noEventsYet": "Aun no hay eventos",
+    "beFirst": "Se el primero en compartir lo que esta pasando en Mazunte!",
+    "addAnEvent": "+ Agregar un Evento",
+    "todaysTimeline": "Linea del Dia",
+    "footer": "Mazunte Connect · Hecho con amor en la costa oaxaquena"
+  },
+  "happeningNow": {
+    "title": "Pasando Ahora",
+    "live": "En Vivo"
+  },
+  "weekGrid": {
+    "title": "Esta Semana"
+  },
+  "featured": {
+    "today": "Hoy",
+    "tomorrow": "Manana",
+    "thisWeek": "Esta Semana",
+    "nextWeek": "Proxima Semana",
+    "comingSoon": "Proximamente",
+    "prev": "← Anterior",
+    "next": "Siguiente →",
+    "goToSlide": "Ir a la diapositiva {number}"
+  },
+  "timeline": {
+    "noEvents": "No se encontraron eventos para esta categoria hoy."
+  },
+  "categories": {
+    "all": "Todos",
+    "yoga": "Yoga",
+    "music": "Musica",
+    "ceremony": "Ceremonia",
+    "food": "Comida",
+    "wellness": "Bienestar",
+    "community": "Comunidad",
+    "market": "Mercado",
+    "other": "Otro"
+  },
+  "subscribe": {
+    "title": "No te pierdas nada",
+    "description": "Recibe el resumen semanal de Mazunte Connect cada lunes por la manana.",
+    "success": "Listo! Nos vemos el lunes.",
+    "placeholder": "tu@correo.com",
+    "subscribing": "Suscribiendo...",
+    "button": "Suscribete — es gratis",
+    "error": "Algo salio mal"
+  },
+  "search": {
+    "title": "Buscar Eventos",
+    "placeholder": "Buscar por nombre, lugar u organizador...",
+    "results": "{count, plural, one {# resultado} other {# resultados}} para \"{query}\"",
+    "noResults": "No se encontraron eventos",
+    "tryDifferent": "Intenta con otro termino de busqueda o navega por la pagina principal."
+  },
+  "submit": {
+    "pageTitle": "Publica tu evento",
+    "pageDescription": "Comparte lo que esta pasando. Clases, ceremonias, pop-ups de comida, musica, mercados — si pasa en Mazunte, pertenece aqui.",
+    "submitted": "Enviado!",
+    "eventTitle": "Titulo del Evento *",
+    "titlePlaceholder": "ej. Vinyasa Flow Matutino",
+    "category": "Categoria *",
+    "selectCategory": "Selecciona una categoria",
+    "where": "Donde? *",
+    "searchPlace": "Busca un lugar en Mazunte...",
+    "description": "Descripcion",
+    "descriptionPlaceholder": "De que se trata este evento?",
+    "recurring": "Es un evento recurrente",
+    "daysOfWeek": "Dias de la semana *",
+    "until": "Hasta",
+    "date": "Fecha *",
+    "startTime": "Hora de Inicio *",
+    "endTime": "Hora de Fin",
+    "organizerName": "Tu Nombre / Estudio *",
+    "organizerPlaceholder": "ej. Sofia, Hridaya Yoga",
+    "images": "Imagenes del Evento (opcional, hasta {max})",
+    "coverLabel": "Portada",
+    "coverHint": "La primera imagen se usara como foto de portada",
+    "uploading": "Subiendo...",
+    "clickToUpload": "Haz clic para subir",
+    "dragAndDrop": "o arrastra y suelta",
+    "imageFormats": "PNG, JPG, WebP o GIF (max 4MB c/u) · {current}/{max} subidas",
+    "maxImages": "Maximo {max} imagenes permitidas",
+    "contact": "Contacto (opcional)",
+    "whatsappPlaceholder": "+52 123 456 7890",
+    "whatsappHint": "Incluye codigo de pais (ej. +52 para Mexico)",
+    "instagramPlaceholder": "@instagram",
+    "linkPlaceholder": "https://sitio.com o link de reserva",
+    "submitting": "Enviando...",
+    "submitButton": "Enviar Evento",
+    "reviewNotice": "Los eventos son revisados antes de aparecer en Mazunte Connect."
+  },
+  "days": {
+    "mon": "Lun",
+    "tue": "Mar",
+    "wed": "Mie",
+    "thu": "Jue",
+    "fri": "Vie",
+    "sat": "Sab",
+    "sun": "Dom"
+  },
+  "event": {
+    "backToEvents": "← Volver a eventos",
+    "recurringEvent": "Evento recurrente",
+    "getDirections": "Como llegar",
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
+    "bookMoreInfo": "Reservar / Mas Info",
+    "upcomingDates": "Proximas Fechas",
+    "notFound": "Evento No Encontrado"
+  },
+  "calendar": {
+    "googleCalendar": "Google Calendar",
+    "downloadIcs": "Descargar .ics"
+  },
+  "places": {
+    "title": "Lugares",
+    "description": "Espacios y lugares que organizan eventos en Mazunte",
+    "noVenues": "No hay lugares con eventos proximos.",
+    "directions": "Direcciones",
+    "upcomingEvents": "{count, plural, one {# evento proximo} other {# eventos proximos}}",
+    "viewAll": "Ver los {count} eventos",
+    "allPlaces": "← Todos los lugares",
+    "by": "por {name}"
+  },
+  "language": {
+    "en": "EN",
+    "es": "ES"
+  },
+  "metadata": {
+    "title": "Mazunte Connect",
+    "description": "El pulso vivo de Mazunte. Eventos, ceremonias, clases, comida y comunidad — todo en un solo lugar.",
+    "searchTitle": "Buscar · Mazunte Connect",
+    "submitTitle": "Publicar Evento · Mazunte Connect",
+    "submitDescription": "Publica tu evento, clase o ceremonia en Mazunte Connect.",
+    "placesTitle": "Lugares · Mazunte Connect",
+    "placesDescription": "Descubre espacios y lugares que organizan eventos en Mazunte",
+    "eventNotFound": "Evento No Encontrado · Mazunte Connect"
+  }
+}

@@ -1,30 +1,41 @@
 import { Header } from "@/components/header";
 import { getVenuesWithEvents } from "@/actions/events";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { categoryConfig, formatTime, getDayOfWeek } from "@/lib/utils";
+import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Places · Mazunte Connect",
-  description: "Discover venues and spaces hosting events in Mazunte",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata" });
+  return {
+    title: t("placesTitle"),
+    description: t("placesDescription"),
+  };
+}
 
 export default async function PlacesPage() {
   const venues = await getVenuesWithEvents();
+  const t = await getTranslations("places");
+  const tc = await getTranslations("categories");
 
   return (
     <main className="min-h-screen">
       <Header />
       <section className="px-6 py-12 sm:px-10">
         <div className="max-w-4xl mx-auto">
-          <h1 className="font-serif text-3xl sm:text-4xl mb-3">Places</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl mb-3">{t("title")}</h1>
           <p className="text-text-soft mb-10">
-            Venues and spaces hosting events in Mazunte
+            {t("description")}
           </p>
 
           {venues.length === 0 ? (
-            <p className="text-text-soft">No venues with upcoming events.</p>
+            <p className="text-text-soft">{t("noVenues")}</p>
           ) : (
             <div className="space-y-8">
               {venues.map((venue) => (
@@ -36,7 +47,7 @@ export default async function PlacesPage() {
                     <div>
                       <h2 className="font-serif text-xl mb-1">{venue.venueName}</h2>
                       <p className="text-sm text-text-soft">
-                        {venue.eventCount} upcoming event{venue.eventCount !== 1 ? "s" : ""}
+                        {t("upcomingEvents", { count: venue.eventCount })}
                       </p>
                     </div>
                     {venue.mapsUrl && (
@@ -46,7 +57,7 @@ export default async function PlacesPage() {
                         rel="noopener noreferrer"
                         className="shrink-0 px-3 py-1.5 rounded-lg bg-black/5 text-sm font-medium hover:bg-black/10 transition-colors"
                       >
-                        Directions
+                        {t("directions")}
                       </a>
                     )}
                   </div>
@@ -82,7 +93,7 @@ export default async function PlacesPage() {
                       href={`/places/${encodeURIComponent(venue.placeId || venue.venueName)}`}
                       className="block mt-4 text-sm text-ocean font-medium hover:underline"
                     >
-                      View all {venue.eventCount} events
+                      {t("viewAll", { count: venue.eventCount })}
                     </Link>
                   )}
                 </div>

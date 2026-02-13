@@ -5,27 +5,10 @@ import { submitEvent, type SubmitEventState } from "@/actions/submit";
 import { uploadImage } from "@/actions/upload";
 import Image from "next/image";
 import { PlacesAutocomplete, type PlaceResult } from "./places-autocomplete";
+import { useTranslations } from "next-intl";
 
-const categories = [
-  { value: "yoga", label: "Yoga" },
-  { value: "music", label: "Music" },
-  { value: "ceremony", label: "Ceremony" },
-  { value: "food", label: "Food" },
-  { value: "wellness", label: "Wellness" },
-  { value: "community", label: "Community" },
-  { value: "market", label: "Market" },
-  { value: "other", label: "Other" },
-];
-
-const days = [
-  { value: "mon", label: "Mon" },
-  { value: "tue", label: "Tue" },
-  { value: "wed", label: "Wed" },
-  { value: "thu", label: "Thu" },
-  { value: "fri", label: "Fri" },
-  { value: "sat", label: "Sat" },
-  { value: "sun", label: "Sun" },
-];
+const categoryKeys = ["yoga", "music", "ceremony", "food", "wellness", "community", "market", "other"];
+const dayKeys = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
 const initialState: SubmitEventState = {
   success: false,
@@ -42,6 +25,9 @@ export function SubmitEventForm() {
   const [imageError, setImageError] = useState<string | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<PlaceResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations("submit");
+  const tc = useTranslations("categories");
+  const td = useTranslations("days");
 
   async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
@@ -49,7 +35,7 @@ export function SubmitEventForm() {
 
     const remainingSlots = MAX_IMAGES - images.length;
     if (remainingSlots <= 0) {
-      setImageError(`Maximum ${MAX_IMAGES} images allowed`);
+      setImageError(t("maxImages", { max: MAX_IMAGES }));
       return;
     }
 
@@ -91,7 +77,7 @@ export function SubmitEventForm() {
     return (
       <div className="max-w-lg mx-auto text-center py-16">
         <div className="text-4xl mb-4">✓</div>
-        <h2 className="font-serif text-2xl mb-2">Submitted!</h2>
+        <h2 className="font-serif text-2xl mb-2">{t("submitted")}</h2>
         <p className="text-text-soft">
           {state.message}
         </p>
@@ -109,12 +95,12 @@ export function SubmitEventForm() {
 
       {/* Title */}
       <div>
-        <label className="block text-sm font-medium mb-1.5">Event Title *</label>
+        <label className="block text-sm font-medium mb-1.5">{t("eventTitle")}</label>
         <input
           name="title"
           required
           className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
-          placeholder="e.g. Morning Vinyasa Flow"
+          placeholder={t("titlePlaceholder")}
         />
         {state.errors?.title && (
           <p className="text-coral text-xs mt-1">{state.errors.title[0]}</p>
@@ -123,16 +109,16 @@ export function SubmitEventForm() {
 
       {/* Category */}
       <div>
-        <label className="block text-sm font-medium mb-1.5">Category *</label>
+        <label className="block text-sm font-medium mb-1.5">{t("category")}</label>
         <select
           name="category"
           required
           className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
         >
-          <option value="">Select a category</option>
-          {categories.map((c) => (
-            <option key={c.value} value={c.value}>
-              {c.label}
+          <option value="">{t("selectCategory")}</option>
+          {categoryKeys.map((key) => (
+            <option key={key} value={key}>
+              {tc(key)}
             </option>
           ))}
         </select>
@@ -140,10 +126,10 @@ export function SubmitEventForm() {
 
       {/* Venue - Places Autocomplete */}
       <div>
-        <label className="block text-sm font-medium mb-1.5">Where? *</label>
+        <label className="block text-sm font-medium mb-1.5">{t("where")}</label>
         <PlacesAutocomplete
           onPlaceSelect={setSelectedPlace}
-          placeholder="Search for a place in Mazunte..."
+          placeholder={t("searchPlace")}
           required
         />
         {/* Hidden inputs to submit place data */}
@@ -159,12 +145,12 @@ export function SubmitEventForm() {
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium mb-1.5">Description</label>
+        <label className="block text-sm font-medium mb-1.5">{t("description")}</label>
         <textarea
           name="description"
           rows={3}
           className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors resize-none"
-          placeholder="What's this event about?"
+          placeholder={t("descriptionPlaceholder")}
         />
       </div>
 
@@ -188,27 +174,27 @@ export function SubmitEventForm() {
             }`}
           />
         </button>
-        <span className="text-sm">This is a recurring event</span>
+        <span className="text-sm">{t("recurring")}</span>
       </div>
 
       {/* Date or Recurrence */}
       {isRecurring ? (
         <div className="space-y-4 p-4 bg-ocean-pale/30 rounded-xl">
           <div>
-            <label className="block text-sm font-medium mb-2">Days of the week *</label>
+            <label className="block text-sm font-medium mb-2">{t("daysOfWeek")}</label>
             <div className="flex flex-wrap gap-2">
-              {days.map((d) => (
+              {dayKeys.map((key) => (
                 <label
-                  key={d.value}
+                  key={key}
                   className="flex items-center gap-1.5 px-3 py-1.5 bg-cream rounded-lg border border-black/10 cursor-pointer text-sm has-checked:bg-ocean has-checked:text-white has-checked:border-ocean transition-colors"
                 >
                   <input
                     type="checkbox"
                     name="recurrenceDays"
-                    value={d.value}
+                    value={key}
                     className="sr-only"
                   />
-                  {d.label}
+                  {td(key)}
                 </label>
               ))}
             </div>
@@ -217,7 +203,7 @@ export function SubmitEventForm() {
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1.5">Until</label>
+            <label className="block text-sm font-medium mb-1.5">{t("until")}</label>
             <input
               name="recurrenceUntil"
               type="date"
@@ -227,7 +213,7 @@ export function SubmitEventForm() {
         </div>
       ) : (
         <div>
-          <label className="block text-sm font-medium mb-1.5">Date *</label>
+          <label className="block text-sm font-medium mb-1.5">{t("date")}</label>
           <input
             name="date"
             type="date"
@@ -243,7 +229,7 @@ export function SubmitEventForm() {
       {/* Times */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1.5">Start Time *</label>
+          <label className="block text-sm font-medium mb-1.5">{t("startTime")}</label>
           <input
             name="startTime"
             type="time"
@@ -252,7 +238,7 @@ export function SubmitEventForm() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1.5">End Time</label>
+          <label className="block text-sm font-medium mb-1.5">{t("endTime")}</label>
           <input
             name="endTime"
             type="time"
@@ -266,19 +252,19 @@ export function SubmitEventForm() {
 
       {/* Organizer */}
       <div>
-        <label className="block text-sm font-medium mb-1.5">Your Name / Studio *</label>
+        <label className="block text-sm font-medium mb-1.5">{t("organizerName")}</label>
         <input
           name="organizerName"
           required
           className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
-          placeholder="e.g. Sofia, Hridaya Yoga"
+          placeholder={t("organizerPlaceholder")}
         />
       </div>
 
       {/* Image Upload */}
       <div>
         <label className="block text-sm font-medium mb-1.5">
-          Event Images (optional, up to {MAX_IMAGES})
+          {t("images", { max: MAX_IMAGES })}
         </label>
 
         {/* Hidden inputs for form submission */}
@@ -306,7 +292,7 @@ export function SubmitEventForm() {
                 </button>
                 {index === 0 && (
                   <span className="absolute bottom-2 left-2 text-[0.6rem] font-semibold uppercase bg-black/50 text-white px-2 py-0.5 rounded">
-                    Cover
+                    {t("coverLabel")}
                   </span>
                 )}
               </div>
@@ -319,14 +305,14 @@ export function SubmitEventForm() {
           <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-black/15 rounded-xl cursor-pointer hover:border-ocean/50 transition-colors bg-cream/50">
             <div className="flex flex-col items-center justify-center py-4">
               {imageUploading ? (
-                <p className="text-sm text-text-soft">Uploading...</p>
+                <p className="text-sm text-text-soft">{t("uploading")}</p>
               ) : (
                 <>
                   <p className="mb-1 text-sm text-text-soft">
-                    <span className="font-medium text-ocean">Click to upload</span> or drag and drop
+                    <span className="font-medium text-ocean">{t("clickToUpload")}</span> {t("dragAndDrop")}
                   </p>
                   <p className="text-xs text-text-lighter">
-                    PNG, JPG, WebP or GIF (max 4MB each) · {images.length}/{MAX_IMAGES} uploaded
+                    {t("imageFormats", { current: images.length, max: MAX_IMAGES })}
                   </p>
                 </>
               )}
@@ -347,34 +333,34 @@ export function SubmitEventForm() {
           <p className="text-coral text-xs mt-1">{imageError}</p>
         )}
         <p className="text-xs text-text-lighter mt-1">
-          First image will be used as the cover photo
+          {t("coverHint")}
         </p>
       </div>
 
       {/* Contact */}
       <div className="space-y-4">
-        <p className="text-sm font-medium">Contact (optional)</p>
+        <p className="text-sm font-medium">{t("contact")}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <input
               name="contactWhatsapp"
               type="tel"
               className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
-              placeholder="+52 123 456 7890"
+              placeholder={t("whatsappPlaceholder")}
             />
-            <p className="text-xs text-text-lighter mt-1">Include country code (e.g. +52 for Mexico)</p>
+            <p className="text-xs text-text-lighter mt-1">{t("whatsappHint")}</p>
           </div>
           <input
             name="contactInstagram"
             className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
-            placeholder="@instagram"
+            placeholder={t("instagramPlaceholder")}
           />
         </div>
         <input
           name="contactLink"
           type="url"
           className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
-          placeholder="https://website.com or booking link"
+          placeholder={t("linkPlaceholder")}
         />
         {state.errors?.contactLink && (
           <p className="text-coral text-xs mt-1">{state.errors.contactLink[0]}</p>
@@ -387,11 +373,11 @@ export function SubmitEventForm() {
         disabled={pending}
         className="w-full py-3.5 rounded-xl bg-ocean text-white font-semibold text-[0.88rem] hover:bg-ocean-light transition-colors disabled:opacity-50 cursor-pointer"
       >
-        {pending ? "Submitting..." : "Submit Event"}
+        {pending ? t("submitting") : t("submitButton")}
       </button>
 
       <p className="text-xs text-text-lighter text-center">
-        Events are reviewed before appearing on Mazunte Connect.
+        {t("reviewNotice")}
       </p>
     </form>
   );

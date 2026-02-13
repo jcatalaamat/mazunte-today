@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { subscribe } from "@/actions/subscribe";
+import { useTranslations } from "next-intl";
 
 export function SubscribeForm() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const t = useTranslations("subscribe");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,18 +24,18 @@ export function SubscribeForm() {
     if (result.success) {
       setSubmitted(true);
     } else {
-      setError(result.error || "Something went wrong");
+      setError(result.error || t("error"));
     }
   }
 
   return (
     <section className="py-10 px-6 text-center border-t border-black/6 sm:py-12 sm:px-10">
-      <h3 className="font-serif text-[1.4rem] mb-1.5">Never miss a moment</h3>
+      <h3 className="font-serif text-[1.4rem] mb-1.5">{t("title")}</h3>
       <p className="text-[0.82rem] text-text-soft mb-5">
-        Get the weekly Mazunte Connect digest every Monday morning.
+        {t("description")}
       </p>
       {submitted ? (
-        <p className="text-ocean font-medium">You&apos;re in! See you Monday.</p>
+        <p className="text-ocean font-medium">{t("success")}</p>
       ) : (
         <form
           onSubmit={handleSubmit}
@@ -43,7 +45,7 @@ export function SubscribeForm() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
+            placeholder={t("placeholder")}
             className="px-4 py-3.5 rounded-xl border-[1.5px] border-black/10 bg-cream font-sans text-[0.88rem] outline-none focus:border-ocean transition-colors"
           />
           {error && (
@@ -54,7 +56,7 @@ export function SubscribeForm() {
             disabled={loading}
             className="px-4 py-3.5 rounded-xl border-none bg-ocean text-white font-sans text-[0.88rem] font-semibold cursor-pointer hover:bg-ocean-light transition-colors disabled:opacity-50"
           >
-            {loading ? "Subscribing..." : "Subscribe — it's free"}
+            {loading ? t("subscribing") : t("button")}
           </button>
         </form>
       )}

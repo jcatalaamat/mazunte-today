@@ -1,13 +1,20 @@
 import { Header } from "@/components/header";
 import { searchEvents } from "@/actions/events";
 import { categoryConfig, formatTime, getDayOfWeek } from "@/lib/utils";
-import Link from "next/link";
-
-export const metadata = {
-  title: "Search · Mazunte Connect",
-};
+import { Link } from "@/i18n/navigation";
+import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata" });
+  return { title: t("searchTitle") };
+}
 
 export default async function SearchPage({
   searchParams,
@@ -16,20 +23,22 @@ export default async function SearchPage({
 }) {
   const { q: query } = await searchParams;
   const results = query ? await searchEvents(query) : [];
+  const t = await getTranslations("search");
+  const tc = await getTranslations("categories");
 
   return (
     <main className="min-h-screen">
       <Header />
       <section className="px-6 py-12 sm:px-10">
         <div className="max-w-2xl mx-auto">
-          <h1 className="font-serif text-2xl mb-6">Search Events</h1>
+          <h1 className="font-serif text-2xl mb-6">{t("title")}</h1>
 
-          <form action="/search" method="GET" className="mb-8">
+          <form method="GET" className="mb-8">
             <input
               type="text"
               name="q"
               defaultValue={query || ""}
-              placeholder="Search by name, venue, or organizer..."
+              placeholder={t("placeholder")}
               autoFocus
               className="w-full px-4 py-3.5 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.9rem] outline-none focus:border-ocean transition-colors"
             />
@@ -37,14 +46,14 @@ export default async function SearchPage({
 
           {query && (
             <p className="text-text-soft text-sm mb-6">
-              {results.length} result{results.length !== 1 ? "s" : ""} for &quot;{query}&quot;
+              {t("results", { count: results.length, query })}
             </p>
           )}
 
           {results.length === 0 && query && (
             <div className="text-center py-12 text-text-lighter">
-              <p className="text-lg mb-1">No events found</p>
-              <p className="text-sm">Try a different search term or browse the homepage.</p>
+              <p className="text-lg mb-1">{t("noResults")}</p>
+              <p className="text-sm">{t("tryDifferent")}</p>
             </div>
           )}
 
@@ -63,13 +72,13 @@ export default async function SearchPage({
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         <span className={`inline-block text-[0.6rem] font-semibold uppercase tracking-wider px-2 py-0.5 rounded mb-2 ${cat.bgClass}`}>
-                          {cat.label}
+                          {tc(event.category)}
                         </span>
                         <h3 className="font-serif text-lg leading-tight mb-1">{event.title}</h3>
                         <div className="flex flex-wrap gap-3 text-xs text-text-lighter">
-                          <span>📅 {dayName}, {event.date}</span>
-                          <span>⏰ {formatTime(event.startTime)}</span>
-                          {event.venueName && <span>📍 {event.venueName}</span>}
+                          <span>{dayName}, {event.date}</span>
+                          <span>{formatTime(event.startTime)}</span>
+                          {event.venueName && <span>{event.venueName}</span>}
                         </div>
                       </div>
                     </div>

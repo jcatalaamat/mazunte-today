@@ -1,0 +1,150 @@
+{
+  "header": {
+    "places": "Places",
+    "search": "Search",
+    "addEvent": "+ Add Event"
+  },
+  "hero": {
+    "whatsHappening": "What's happening",
+    "rightNow": "right now",
+    "description": "The living pulse of Mazunte. Events, ceremonies, classes, food & community — all in one place."
+  },
+  "home": {
+    "noEventsYet": "No events yet",
+    "beFirst": "Be the first to share what's happening in Mazunte!",
+    "addAnEvent": "+ Add an Event",
+    "todaysTimeline": "Today's Timeline",
+    "footer": "Mazunte Connect · Made with love on the Oaxacan coast"
+  },
+  "happeningNow": {
+    "title": "Happening Now",
+    "live": "Live"
+  },
+  "weekGrid": {
+    "title": "Coming This Week"
+  },
+  "featured": {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "thisWeek": "This Week",
+    "nextWeek": "Next Week",
+    "comingSoon": "Coming Soon",
+    "prev": "← Prev",
+    "next": "Next →",
+    "goToSlide": "Go to slide {number}"
+  },
+  "timeline": {
+    "noEvents": "No events found for this category today."
+  },
+  "categories": {
+    "all": "All",
+    "yoga": "Yoga",
+    "music": "Music",
+    "ceremony": "Ceremony",
+    "food": "Food",
+    "wellness": "Wellness",
+    "community": "Community",
+    "market": "Market",
+    "other": "Other"
+  },
+  "subscribe": {
+    "title": "Never miss a moment",
+    "description": "Get the weekly Mazunte Connect digest every Monday morning.",
+    "success": "You're in! See you Monday.",
+    "placeholder": "your@email.com",
+    "subscribing": "Subscribing...",
+    "button": "Subscribe — it's free",
+    "error": "Something went wrong"
+  },
+  "search": {
+    "title": "Search Events",
+    "placeholder": "Search by name, venue, or organizer...",
+    "results": "{count, plural, one {# result} other {# results}} for \"{query}\"",
+    "noResults": "No events found",
+    "tryDifferent": "Try a different search term or browse the homepage."
+  },
+  "submit": {
+    "pageTitle": "List your event",
+    "pageDescription": "Share what's happening. Classes, ceremonies, food pop-ups, music, markets — if it's happening in Mazunte, it belongs here.",
+    "submitted": "Submitted!",
+    "eventTitle": "Event Title *",
+    "titlePlaceholder": "e.g. Morning Vinyasa Flow",
+    "category": "Category *",
+    "selectCategory": "Select a category",
+    "where": "Where? *",
+    "searchPlace": "Search for a place in Mazunte...",
+    "description": "Description",
+    "descriptionPlaceholder": "What's this event about?",
+    "recurring": "This is a recurring event",
+    "daysOfWeek": "Days of the week *",
+    "until": "Until",
+    "date": "Date *",
+    "startTime": "Start Time *",
+    "endTime": "End Time",
+    "organizerName": "Your Name / Studio *",
+    "organizerPlaceholder": "e.g. Sofia, Hridaya Yoga",
+    "images": "Event Images (optional, up to {max})",
+    "coverLabel": "Cover",
+    "coverHint": "First image will be used as the cover photo",
+    "uploading": "Uploading...",
+    "clickToUpload": "Click to upload",
+    "dragAndDrop": "or drag and drop",
+    "imageFormats": "PNG, JPG, WebP or GIF (max 4MB each) · {current}/{max} uploaded",
+    "maxImages": "Maximum {max} images allowed",
+    "contact": "Contact (optional)",
+    "whatsappPlaceholder": "+52 123 456 7890",
+    "whatsappHint": "Include country code (e.g. +52 for Mexico)",
+    "instagramPlaceholder": "@instagram",
+    "linkPlaceholder": "https://website.com or booking link",
+    "submitting": "Submitting...",
+    "submitButton": "Submit Event",
+    "reviewNotice": "Events are reviewed before appearing on Mazunte Connect."
+  },
+  "days": {
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun"
+  },
+  "event": {
+    "backToEvents": "← Back to events",
+    "recurringEvent": "Recurring event",
+    "getDirections": "Get directions",
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
+    "bookMoreInfo": "Book / More Info",
+    "upcomingDates": "Upcoming Dates",
+    "notFound": "Event Not Found"
+  },
+  "calendar": {
+    "googleCalendar": "Google Calendar",
+    "downloadIcs": "Download .ics"
+  },
+  "places": {
+    "title": "Places",
+    "description": "Venues and spaces hosting events in Mazunte",
+    "noVenues": "No venues with upcoming events.",
+    "directions": "Directions",
+    "upcomingEvents": "{count, plural, one {# upcoming event} other {# upcoming events}}",
+    "viewAll": "View all {count} events",
+    "allPlaces": "← All places",
+    "by": "by {name}"
+  },
+  "language": {
+    "en": "EN",
+    "es": "ES"
+  },
+  "metadata": {
+    "title": "Mazunte Connect",
+    "description": "The living pulse of Mazunte. Events, ceremonies, classes, food & community — all in one place.",
+    "searchTitle": "Search · Mazunte Connect",
+    "submitTitle": "Submit Event · Mazunte Connect",
+    "submitDescription": "List your event, class, or ceremony on Mazunte Connect.",
+    "placesTitle": "Places · Mazunte Connect",
+    "placesDescription": "Discover venues and spaces hosting events in Mazunte",
+    "eventNotFound": "Event Not Found · Mazunte Connect"
+  }
+}

@@ -1,17 +1,23 @@
 import { Header } from "@/components/header";
 import { getEventsByVenue } from "@/actions/events";
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { categoryConfig, formatTime, getDayOfWeek, formatDate } from "@/lib/utils";
+import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: { params: Promise<{ venue: string }> }) {
-  const { venue } = await params;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ venue: string; locale: string }>;
+}) {
+  const { venue, locale } = await params;
   const decodedVenue = decodeURIComponent(venue);
   const result = await getEventsByVenue(decodedVenue);
+  const t = await getTranslations({ locale, namespace: "metadata" });
 
-  if (!result) return { title: "Venue Not Found · Mazunte Connect" };
+  if (!result) return { title: t("eventNotFound") };
 
   return {
     title: `${result.venueName} · Mazunte Connect`,
@@ -19,7 +25,11 @@ export async function generateMetadata({ params }: { params: Promise<{ venue: st
   };
 }
 
-export default async function VenuePage({ params }: { params: Promise<{ venue: string }> }) {
+export default async function VenuePage({
+  params,
+}: {
+  params: Promise<{ venue: string }>;
+}) {
   const { venue } = await params;
   const decodedVenue = decodeURIComponent(venue);
   const result = await getEventsByVenue(decodedVenue);
@@ -27,6 +37,9 @@ export default async function VenuePage({ params }: { params: Promise<{ venue: s
   if (!result) {
     notFound();
   }
+
+  const t = await getTranslations("places");
+  const tc = await getTranslations("categories");
 
   // Group events by date
   const eventsByDate = result.events.reduce((acc, event) => {
@@ -46,7 +59,7 @@ export default async function VenuePage({ params }: { params: Promise<{ venue: s
             href="/places"
             className="inline-flex items-center gap-2 text-sm text-text-soft mb-6 hover:text-text transition-colors"
           >
-            ← All places
+            {t("allPlaces")}
           </Link>
 
           <h1 className="font-serif text-3xl sm:text-4xl mb-3">{result.venueName}</h1>
@@ -58,12 +71,12 @@ export default async function VenuePage({ params }: { params: Promise<{ venue: s
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/5 text-text font-medium text-sm hover:bg-black/10 transition-colors mb-8"
             >
-              Get directions
+              {t("directions")}
             </a>
           )}
 
           <p className="text-text-soft mb-10">
-            {result.events.length} upcoming event{result.events.length !== 1 ? "s" : ""}
+            {t("upcomingEvents", { count: result.events.length })}
           </p>
 
           <div className="space-y-8">
@@ -94,7 +107,7 @@ export default async function VenuePage({ params }: { params: Promise<{ venue: s
                           </p>
                           {event.organizerName && (
                             <p className="text-xs text-text-lighter mt-0.5">
-                              by {event.organizerName}
+                              {t("by", { name: event.organizerName })}
                             </p>
                           )}
                         </div>

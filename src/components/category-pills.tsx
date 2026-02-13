@@ -4,11 +4,13 @@ import { useState } from "react";
 import { categoryConfig } from "@/lib/utils";
 import { type EventWithOccurrence } from "@/actions/events";
 import { Timeline } from "./timeline";
+import { useTranslations } from "next-intl";
 
 const categories = ["all", "yoga", "music", "ceremony", "food", "wellness", "community", "market"];
 
 export function CategoryFilter({ events }: { events: EventWithOccurrence[] }) {
   const [active, setActive] = useState("all");
+  const t = useTranslations("categories");
 
   const filtered = active === "all"
     ? events
@@ -20,7 +22,7 @@ export function CategoryFilter({ events }: { events: EventWithOccurrence[] }) {
         {categories.map((cat) => {
           const isActive = active === cat;
           const config = categoryConfig[cat];
-          const label = cat === "all" ? "All" : `${config?.emoji} ${config?.label}`;
+          const label = cat === "all" ? t("all") : `${config?.emoji} ${t(cat)}`;
           return (
             <button
               key={cat}

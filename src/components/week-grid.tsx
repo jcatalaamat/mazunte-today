@@ -1,15 +1,21 @@
+"use client";
+
 import { type EventWithOccurrence } from "@/actions/events";
 import { categoryConfig, formatTime, getDayOfWeek } from "@/lib/utils";
 import { SectionLabel } from "./section-label";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export function WeekGrid({ events }: { events: EventWithOccurrence[] }) {
+  const t = useTranslations("weekGrid");
+  const tc = useTranslations("categories");
+
   if (events.length === 0) return null;
 
   return (
     <>
-      <SectionLabel title="Coming This Week" />
+      <SectionLabel title={t("title")} />
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 px-6 pb-10 sm:px-10">
         {events.map((event, i) => {
           const cat = categoryConfig[event.category] || categoryConfig.other;
@@ -49,7 +55,7 @@ export function WeekGrid({ events }: { events: EventWithOccurrence[] }) {
                   {event.venueName && ` · ${event.venueName}`}
                 </p>
                 <span className={`inline-block mt-2 text-[0.6rem] font-semibold uppercase tracking-wider px-2 py-0.5 rounded ${cat.bgClass}`}>
-                  {cat.label}
+                  {tc(event.category)}
                 </span>
               </div>
             </Link>

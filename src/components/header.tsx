@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { LanguageSwitcher } from "./language-switcher";
 
 export function Header() {
   const [time, setTime] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const t = useTranslations("header");
 
   useEffect(() => {
     function update() {
@@ -41,20 +44,21 @@ export function Header() {
             href="/places"
             className="text-xs font-medium text-text-lighter hover:text-text-soft transition-colors"
           >
-            Places
+            {t("places")}
           </Link>
           <Link
             href="/search"
             className="text-xs font-medium text-text-lighter hover:text-text-soft transition-colors"
           >
-            Search
+            {t("search")}
           </Link>
           <Link
             href="/submit"
             className="text-xs font-semibold uppercase tracking-wide text-ocean hover:text-ocean/80 transition-colors"
           >
-            + Add Event
+            {t("addEvent")}
           </Link>
+          <LanguageSwitcher />
           <div className="flex items-center gap-1.5 text-xs font-medium text-text-soft">
             <div className="w-2 h-2 bg-jungle-light rounded-full animate-pulse-dot" />
             <span>{time}</span>
@@ -63,6 +67,7 @@ export function Header() {
 
         {/* Mobile: time + hamburger */}
         <div className="flex sm:hidden items-center gap-3">
+          <LanguageSwitcher />
           <div className="flex items-center gap-1.5 text-xs font-medium text-text-soft">
             <div className="w-2 h-2 bg-jungle-light rounded-full animate-pulse-dot" />
             <span>{time}</span>
@@ -88,21 +93,21 @@ export function Header() {
               onClick={() => setMenuOpen(false)}
               className="py-2.5 text-sm font-medium text-text-soft hover:text-text transition-colors"
             >
-              Places
+              {t("places")}
             </Link>
             <Link
               href="/search"
               onClick={() => setMenuOpen(false)}
               className="py-2.5 text-sm font-medium text-text-soft hover:text-text transition-colors"
             >
-              Search
+              {t("search")}
             </Link>
             <Link
               href="/submit"
               onClick={() => setMenuOpen(false)}
               className="py-2.5 text-sm font-semibold text-ocean hover:text-ocean/80 transition-colors"
             >
-              + Add Event
+              {t("addEvent")}
             </Link>
           </nav>
         </div>

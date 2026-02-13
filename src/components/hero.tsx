@@ -1,20 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 
 export function Hero() {
   const [dateStr, setDateStr] = useState("");
+  const t = useTranslations("hero");
+  const locale = useLocale();
 
   useEffect(() => {
     setDateStr(
-      new Date().toLocaleDateString("en-US", {
+      new Date().toLocaleDateString(locale === "es" ? "es-MX" : "en-US", {
         timeZone: "America/Mexico_City",
         weekday: "long",
         month: "long",
         day: "numeric",
       })
     );
-  }, []);
+  }, [locale]);
 
   return (
     <section className="relative pt-12 pb-8 px-6 text-center sm:pt-16 sm:pb-10 sm:px-10">
@@ -23,13 +26,12 @@ export function Hero() {
         {dateStr}
       </p>
       <h1 className="font-serif text-[clamp(2.2rem,6vw,3.5rem)] font-normal leading-[1.1] text-text mb-2">
-        What&apos;s happening
+        {t("whatsHappening")}
         <br />
-        <em className="italic text-ocean">right now</em>
+        <em className="italic text-ocean">{t("rightNow")}</em>
       </h1>
       <p className="text-base text-text-soft max-w-[340px] mx-auto leading-relaxed">
-        The living pulse of Mazunte. Events, ceremonies, classes, food &
-        community — all in one place.
+        {t("description")}
       </p>
     </section>
   );
