@@ -11,7 +11,7 @@ if (
 ) {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
     api_host: "/ingest",
-    ui_host: "https://us.posthog.com",
+    ui_host: "https://eu.posthog.com",
     capture_pageview: false, // we capture manually for SPA accuracy
     capture_pageleave: true,
   });
