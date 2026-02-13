@@ -19,6 +19,7 @@ export const categoryEnum = pgEnum("category", [
   "wellness",
   "community",
   "market",
+  "family",
   "other",
 ]);
 

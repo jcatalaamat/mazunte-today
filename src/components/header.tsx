@@ -47,6 +47,12 @@ export function Header() {
             {t("places")}
           </Link>
           <Link
+            href="/category"
+            className="text-xs font-medium text-text-lighter hover:text-text-soft transition-colors"
+          >
+            {t("categories")}
+          </Link>
+          <Link
             href="/search"
             className="text-xs font-medium text-text-lighter hover:text-text-soft transition-colors"
           >
@@ -94,6 +100,13 @@ export function Header() {
               className="py-2.5 text-sm font-medium text-text-soft hover:text-text transition-colors"
             >
               {t("places")}
+            </Link>
+            <Link
+              href="/category"
+              onClick={() => setMenuOpen(false)}
+              className="py-2.5 text-sm font-medium text-text-soft hover:text-text transition-colors"
+            >
+              {t("categories")}
             </Link>
             <Link
               href="/search"

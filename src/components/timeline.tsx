@@ -14,6 +14,7 @@ const categoryColors: Record<string, { dot: string; line: string; bg: string }> 
   wellness: { dot: "border-jungle", line: "bg-jungle", bg: "bg-[#E0F0E4]" },
   community: { dot: "border-ocean-light", line: "bg-ocean-light", bg: "bg-ocean-pale" },
   market: { dot: "border-sunset-light", line: "bg-sunset-light", bg: "bg-[#FDF0DB]" },
+  family: { dot: "border-[#9B6B9E]", line: "bg-[#9B6B9E]", bg: "bg-[#F3E8F4]" },
   other: { dot: "border-text-lighter", line: "bg-text-lighter", bg: "bg-sand-dark" },
 };
 

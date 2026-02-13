@@ -7,7 +7,7 @@ import Image from "next/image";
 import { PlacesAutocomplete, type PlaceResult } from "./places-autocomplete";
 import { useTranslations } from "next-intl";
 
-const categoryKeys = ["yoga", "music", "ceremony", "food", "wellness", "community", "market", "other"];
+const categoryKeys = ["yoga", "music", "ceremony", "food", "wellness", "community", "market", "family", "other"];
 const dayKeys = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
 const initialState: SubmitEventState = {

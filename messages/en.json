@@ -2,7 +2,8 @@
   "header": {
     "places": "Places",
     "search": "Search",
-    "addEvent": "+ Add Event"
+    "addEvent": "+ Add Event",
+    "categories": "Categories"
   },
   "hero": {
     "whatsHappening": "What's happening",
@@ -34,7 +35,8 @@
     "goToSlide": "Go to slide {number}"
   },
   "timeline": {
-    "noEvents": "No events found for this category today."
+    "noEvents": "No events found for this category today.",
+    "viewAllInCategory": "View all {category} events →"
   },
   "categories": {
     "all": "All",
@@ -45,6 +47,7 @@
     "wellness": "Wellness",
     "community": "Community",
     "market": "Market",
+    "family": "Family",
     "other": "Other"
   },
   "subscribe": {
@@ -133,6 +136,13 @@
     "allPlaces": "← All places",
     "by": "by {name}"
   },
+  "categoryPage": {
+    "title": "Categories",
+    "description": "Browse events by category in Mazunte",
+    "allCategories": "← All categories",
+    "eventCount": "{count, plural, one {# upcoming event} other {# upcoming events}}",
+    "noEvents": "No upcoming events in this category."
+  },
   "language": {
     "en": "EN",
     "es": "ES"
@@ -150,6 +160,8 @@
     "submitDescription": "List your event, class, or ceremony on Mazunte Connect.",
     "placesTitle": "Places · Mazunte Connect",
     "placesDescription": "Discover venues and spaces hosting events in Mazunte",
-    "eventNotFound": "Event Not Found · Mazunte Connect"
+    "eventNotFound": "Event Not Found · Mazunte Connect",
+    "categoriesTitle": "Categories · Mazunte Connect",
+    "categoriesDescription": "Browse yoga, music, ceremony, food, wellness and more events in Mazunte"
   }
 }

@@ -5,12 +5,14 @@ import { categoryConfig } from "@/lib/utils";
 import { type EventWithOccurrence } from "@/actions/events";
 import { Timeline } from "./timeline";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
-const categories = ["all", "yoga", "music", "ceremony", "food", "wellness", "community", "market"];
+const categories = ["all", "yoga", "music", "ceremony", "food", "wellness", "community", "market", "family"];
 
 export function CategoryFilter({ events }: { events: EventWithOccurrence[] }) {
   const [active, setActive] = useState("all");
   const t = useTranslations("categories");
+  const tt = useTranslations("timeline");
 
   const filtered = active === "all"
     ? events
@@ -39,6 +41,16 @@ export function CategoryFilter({ events }: { events: EventWithOccurrence[] }) {
         })}
       </div>
       <Timeline events={filtered} />
+      {active !== "all" && (
+        <div className="px-6 pb-6 sm:px-10 text-center">
+          <Link
+            href={`/category/${active}`}
+            className="text-sm text-ocean font-medium hover:underline"
+          >
+            {tt("viewAllInCategory", { category: t(active) })}
+          </Link>
+        </div>
+      )}
     </>
   );
 }

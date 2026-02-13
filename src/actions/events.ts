@@ -225,6 +225,78 @@ export async function searchEvents(query: string): Promise<EventWithOccurrence[]
   return rows.map(mapRow);
 }
 
+type Category = typeof events.$inferSelect.category;
+
+/** Get upcoming events for a specific category */
+export async function getEventsByCategory(
+  category: string
+): Promise<EventWithOccurrence[]> {
+  const today = getMazunteToday();
+
+  const rows = await db
+    .select({ occurrence: eventOccurrences, event: events })
+    .from(eventOccurrences)
+    .innerJoin(events, eq(eventOccurrences.eventId, events.id))
+    .where(
+      and(
+        eq(events.isApproved, true),
+        eq(eventOccurrences.isCancelled, false),
+        gte(eventOccurrences.date, today),
+        eq(events.category, category as Category)
+      )
+    )
+    .orderBy(eventOccurrences.date, eventOccurrences.startTime)
+    .limit(50);
+
+  return rows.map(mapRow);
+}
+
+export type CategoryWithEvents = {
+  category: string;
+  count: number;
+  previewEvents: EventWithOccurrence[];
+};
+
+/** Get all categories with their upcoming event counts */
+export async function getCategoriesWithCounts(): Promise<CategoryWithEvents[]> {
+  const today = getMazunteToday();
+
+  const rows = await db
+    .select({ occurrence: eventOccurrences, event: events })
+    .from(eventOccurrences)
+    .innerJoin(events, eq(eventOccurrences.eventId, events.id))
+    .where(
+      and(
+        eq(events.isApproved, true),
+        eq(eventOccurrences.isCancelled, false),
+        gte(eventOccurrences.date, today)
+      )
+    )
+    .orderBy(eventOccurrences.date, eventOccurrences.startTime);
+
+  const categoryMap = new Map<string, { count: number; events: EventWithOccurrence[] }>();
+
+  for (const row of rows) {
+    const cat = row.event.category;
+    if (!categoryMap.has(cat)) {
+      categoryMap.set(cat, { count: 0, events: [] });
+    }
+    const entry = categoryMap.get(cat)!;
+    entry.count++;
+    if (entry.events.length < 3) {
+      entry.events.push(mapRow(row));
+    }
+  }
+
+  const allCategories = ["yoga", "music", "ceremony", "food", "wellness", "community", "market", "family", "other"];
+
+  return allCategories.map((cat) => ({
+    category: cat,
+    count: categoryMap.get(cat)?.count ?? 0,
+    previewEvents: categoryMap.get(cat)?.events ?? [],
+  }));
+}
+
 export type VenueWithEvents = {
   venueName: string;
   placeId: string | null;

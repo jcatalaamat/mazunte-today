@@ -176,5 +176,11 @@ export const categoryConfig: Record<string, { label: string; emoji: string; colo
   wellness: { label: "Wellness", emoji: "💆", colorClass: "text-jungle", bgClass: "bg-[#E0F0E4] text-jungle", gradClass: "grad-wellness" },
   community: { label: "Community", emoji: "🌿", colorClass: "text-ocean-light", bgClass: "bg-ocean-pale text-ocean-light", gradClass: "grad-community" },
   market: { label: "Market", emoji: "🛍️", colorClass: "text-[#C67F2A]", bgClass: "bg-[#FDF0DB] text-[#C67F2A]", gradClass: "grad-market" },
+  family: { label: "Family", emoji: "👨‍👩‍👧", colorClass: "text-[#9B6B9E]", bgClass: "bg-[#F3E8F4] text-[#9B6B9E]", gradClass: "grad-community" },
   other: { label: "Other", emoji: "✦", colorClass: "text-text-soft", bgClass: "bg-sand-dark text-text-soft", gradClass: "grad-community" },
 };
+
+/** Check if a string is a valid category slug */
+export function isValidCategory(slug: string): boolean {
+  return slug in categoryConfig;
+}
