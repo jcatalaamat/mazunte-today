@@ -1,7 +1,9 @@
 "use server";
 
+import Anthropic from "@anthropic-ai/sdk";
 import { extractEventInfo, type ExtractedEvent } from "./extract";
 import { isAdminAuthenticated } from "./admin";
+import { getMazunteToday } from "@/lib/utils";
 
 export type ParsedMessage = {
   id: string;
@@ -91,4 +93,95 @@ export async function extractFromMessages(
   if (!isAuthenticated) return { error: "Not authenticated" };
 
   return extractEventInfo(combinedText, []);
+}
+
+/**
+ * Bulk extract: takes a venue schedule text and returns multiple events.
+ * Useful when a venue sends "Monday: yoga 7am, Tuesday: cacao 6pm..."
+ */
+export async function bulkExtractEvents(
+  text: string,
+  venueName?: string
+): Promise<{ events: ExtractedEvent[] } | { error: string }> {
+  const isAuthenticated = await isAdminAuthenticated();
+  if (!isAuthenticated) return { error: "Not authenticated" };
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return { error: "AI extraction not configured" };
+
+  const client = new Anthropic({ apiKey });
+  const today = getMazunteToday();
+
+  const prompt = `You are extracting MULTIPLE events from a venue schedule or message. Today is ${today}.
+
+The text may contain several events — extract ALL of them as a JSON array.
+
+For each event, return:
+{
+  "title": "string",
+  "description": "string or null (keep original voice/text)",
+  "category": "yoga|music|ceremony|food|wellness|community|market|family|other",
+  "venueName": "${venueName || 'string or null'}",
+  "date": "YYYY-MM-DD or null",
+  "startTime": "HH:MM or null",
+  "endTime": "HH:MM or null",
+  "isRecurring": false,
+  "recurrenceDays": [],
+  "organizerName": "string or null",
+  "contactWhatsapp": "string or null",
+  "contactInstagram": "string or null",
+  "contactLink": "string or null"
+}
+
+Return a JSON array of events. No markdown fences, no explanation. Just the array.
+
+Text:
+${text}`;
+
+  try {
+    const response = await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 4096,
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const textBlock = response.content.find((b) => b.type === "text");
+    if (!textBlock || textBlock.type !== "text") {
+      return { error: "Failed to extract events" };
+    }
+
+    let jsonText = textBlock.text.trim();
+    if (jsonText.startsWith("```")) {
+      jsonText = jsonText.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+    }
+
+    const parsed = JSON.parse(jsonText);
+    const arr = Array.isArray(parsed) ? parsed : [parsed];
+
+    const validCategories = ["yoga", "music", "ceremony", "food", "wellness", "community", "market", "family", "other"];
+
+    const events: ExtractedEvent[] = arr.map((e: Record<string, unknown>) => ({
+      title: (e.title as string) || null,
+      description: (e.description as string) || null,
+      category: validCategories.includes(e.category as string) ? (e.category as string) : null,
+      venueName: (e.venueName as string) || venueName || null,
+      date: (e.date as string) || null,
+      startTime: (e.startTime as string) || null,
+      endTime: (e.endTime as string) || null,
+      isRecurring: false,
+      recurrenceDays: [],
+      organizerName: (e.organizerName as string) || null,
+      contactWhatsapp: (e.contactWhatsapp as string) || null,
+      contactInstagram: (e.contactInstagram as string) || null,
+      contactLink: (e.contactLink as string) || null,
+      placeId: null,
+      mapsUrl: null,
+      venueAddress: null,
+    }));
+
+    return { events };
+  } catch (err) {
+    console.error("Bulk extraction failed:", err);
+    return { error: "Failed to extract events" };
+  }
 }
