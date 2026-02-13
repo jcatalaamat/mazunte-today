@@ -102,7 +102,16 @@
     "linkPlaceholder": "https://sitio.com o link de reserva",
     "submitting": "Enviando...",
     "submitButton": "Enviar Evento",
-    "reviewNotice": "Los eventos son revisados antes de aparecer en Mazunte Today."
+    "reviewNotice": "Los eventos son revisados antes de aparecer en Mazunte Today.",
+    "pasteLabel": "Pega la info de tu evento",
+    "pastePlaceholder": "Pega tu mensaje de WhatsApp, caption de Instagram, o descripcion del evento aqui...",
+    "pasteHint": "Extraeremos los detalles del evento automaticamente. Funciona en espanol e ingles.",
+    "pasteRequired": "Por favor pega texto de tu evento primero.",
+    "extractButton": "Extraer Evento →",
+    "extracting": "Leyendo tu evento...",
+    "extractHint": "La IA extraera titulo, fecha, hora, lugar y mas de tu texto.",
+    "backButton": "Volver a editar texto",
+    "confirmDescription": "Llenamos lo que pudimos. Revisa y edita lo que necesite correccion."
   },
   "days": {
     "mon": "Lun",

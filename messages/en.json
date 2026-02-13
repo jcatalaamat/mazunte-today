@@ -102,7 +102,16 @@
     "linkPlaceholder": "https://website.com or booking link",
     "submitting": "Submitting...",
     "submitButton": "Submit Event",
-    "reviewNotice": "Events are reviewed before appearing on Mazunte Today."
+    "reviewNotice": "Events are reviewed before appearing on Mazunte Today.",
+    "pasteLabel": "Paste your event info",
+    "pastePlaceholder": "Paste your WhatsApp message, Instagram caption, or event description here...",
+    "pasteHint": "We'll extract the event details automatically. Works in English and Spanish.",
+    "pasteRequired": "Please paste some event text first.",
+    "extractButton": "Extract Event →",
+    "extracting": "Reading your event...",
+    "extractHint": "AI will extract title, date, time, venue, and more from your text.",
+    "backButton": "Back to edit text",
+    "confirmDescription": "We filled in what we could. Review and edit anything that needs fixing."
   },
   "days": {
     "mon": "Mon",
