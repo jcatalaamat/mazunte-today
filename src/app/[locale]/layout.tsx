@@ -5,6 +5,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
+import { PostHogProvider } from "@/components/posthog-provider";
 import "../globals.css";
 
 const instrumentSerif = Instrument_Serif({
@@ -68,7 +69,9 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body
         className={`${instrumentSerif.variable} ${dmSans.variable} antialiased`}
       >
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <PostHogProvider>
+          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        </PostHogProvider>
       </body>
     </html>
   );

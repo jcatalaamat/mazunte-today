@@ -10,6 +10,19 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  rewrites: async () => ({
+    beforeFiles: [
+      {
+        source: "/ingest/static/:path*",
+        destination: "https://us-assets.i.posthog.com/static/:path*",
+      },
+      {
+        source: "/ingest/:path*",
+        destination: "https://us.i.posthog.com/:path*",
+      },
+    ],
+  }),
+  skipTrailingSlashRedirect: true,
 };
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");

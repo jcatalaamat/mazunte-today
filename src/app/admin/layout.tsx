@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Instrument_Serif, DM_Sans } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
+import { PostHogProvider } from "@/components/posthog-provider";
 import "../globals.css";
 
 const instrumentSerif = Instrument_Serif({
@@ -25,9 +26,11 @@ export default async function AdminLayout({ children }: { children: ReactNode })
       <body
         className={`${instrumentSerif.variable} ${dmSans.variable} antialiased`}
       >
-        <NextIntlClientProvider locale="en" messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <PostHogProvider>
+          <NextIntlClientProvider locale="en" messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </PostHogProvider>
       </body>
     </html>
   );
