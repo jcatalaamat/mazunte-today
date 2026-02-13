@@ -6,7 +6,7 @@ import { LogoutButton } from "../logout-button";
 import { revalidatePath } from "next/cache";
 
 export const metadata = {
-  title: "Subscribers · Mazunte Connect",
+  title: "Subscribers · Mazunte Today",
 };
 
 export const dynamic = "force-dynamic";

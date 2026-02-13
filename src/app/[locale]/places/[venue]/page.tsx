@@ -20,7 +20,7 @@ export async function generateMetadata({
   if (!result) return { title: t("eventNotFound") };
 
   return {
-    title: `${result.venueName} · Mazunte Connect`,
+    title: `${result.venueName} · Mazunte Today`,
     description: `Events at ${result.venueName} in Mazunte`,
   };
 }

@@ -21,7 +21,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "metadata" });
 
   return {
-    title: `${config.emoji} ${tc(slug)} · Mazunte Connect`,
+    title: `${config.emoji} ${tc(slug)} · Mazunte Today`,
     description: t("categoriesDescription"),
   };
 }

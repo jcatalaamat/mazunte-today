@@ -35,7 +35,7 @@ export async function generateMetadata({
     openGraph: {
       title: t("title"),
       description: t("description"),
-      siteName: "Mazunte Connect",
+      siteName: "Mazunte Today",
       locale: locale === "es" ? "es_MX" : "en_US",
       type: "website",
     },

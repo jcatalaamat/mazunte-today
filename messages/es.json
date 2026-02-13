@@ -15,7 +15,7 @@
     "beFirst": "Se el primero en compartir lo que esta pasando en Mazunte!",
     "addAnEvent": "+ Agregar un Evento",
     "todaysTimeline": "Linea del Dia",
-    "footer": "Mazunte Connect · Hecho con amor en la costa oaxaquena"
+    "footer": "Mazunte Today · Hecho con amor en la costa oaxaquena"
   },
   "happeningNow": {
     "title": "Pasando Ahora",
@@ -52,7 +52,7 @@
   },
   "subscribe": {
     "title": "No te pierdas nada",
-    "description": "Recibe el resumen semanal de Mazunte Connect cada lunes por la manana.",
+    "description": "Recibe el resumen semanal de Mazunte Today cada lunes por la manana.",
     "success": "Listo! Nos vemos el lunes.",
     "placeholder": "tu@correo.com",
     "subscribing": "Suscribiendo...",
@@ -101,7 +101,7 @@
     "linkPlaceholder": "https://sitio.com o link de reserva",
     "submitting": "Enviando...",
     "submitButton": "Enviar Evento",
-    "reviewNotice": "Los eventos son revisados antes de aparecer en Mazunte Connect."
+    "reviewNotice": "Los eventos son revisados antes de aparecer en Mazunte Today."
   },
   "days": {
     "mon": "Lun",
@@ -153,15 +153,15 @@
     "backHome": "Volver al inicio"
   },
   "metadata": {
-    "title": "Mazunte Connect",
+    "title": "Mazunte Today",
     "description": "El pulso vivo de Mazunte. Eventos, ceremonias, clases, comida y comunidad — todo en un solo lugar.",
-    "searchTitle": "Buscar · Mazunte Connect",
-    "submitTitle": "Publicar Evento · Mazunte Connect",
-    "submitDescription": "Publica tu evento, clase o ceremonia en Mazunte Connect.",
-    "placesTitle": "Lugares · Mazunte Connect",
+    "searchTitle": "Buscar · Mazunte Today",
+    "submitTitle": "Publicar Evento · Mazunte Today",
+    "submitDescription": "Publica tu evento, clase o ceremonia en Mazunte Today.",
+    "placesTitle": "Lugares · Mazunte Today",
     "placesDescription": "Descubre espacios y lugares que organizan eventos en Mazunte",
-    "eventNotFound": "Evento No Encontrado · Mazunte Connect",
-    "categoriesTitle": "Categorias · Mazunte Connect",
+    "eventNotFound": "Evento No Encontrado · Mazunte Today",
+    "categoriesTitle": "Categorias · Mazunte Today",
     "categoriesDescription": "Explora yoga, musica, ceremonias, comida, bienestar y mas eventos en Mazunte"
   }
 }

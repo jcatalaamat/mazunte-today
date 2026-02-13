@@ -138,13 +138,13 @@ export function getICalContent(event: {
     endTimeFormatted = `${endHour.toString().padStart(2, "0")}${m.toString().padStart(2, "0")}00`;
   }
 
-  const uid = `${event.slug}-${event.date}@mazuntenow.com`;
+  const uid = `${event.slug}-${event.date}@mazunte.today`;
   const now = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Mazunte Connect//Events//EN",
+    "PRODID:-//Mazunte Today//Events//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",

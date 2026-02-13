@@ -15,7 +15,7 @@
     "beFirst": "Be the first to share what's happening in Mazunte!",
     "addAnEvent": "+ Add an Event",
     "todaysTimeline": "Today's Timeline",
-    "footer": "Mazunte Connect · Made with love on the Oaxacan coast"
+    "footer": "Mazunte Today · Made with love on the Oaxacan coast"
   },
   "happeningNow": {
     "title": "Happening Now",
@@ -52,7 +52,7 @@
   },
   "subscribe": {
     "title": "Never miss a moment",
-    "description": "Get the weekly Mazunte Connect digest every Monday morning.",
+    "description": "Get the weekly Mazunte Today digest every Monday morning.",
     "success": "You're in! See you Monday.",
     "placeholder": "your@email.com",
     "subscribing": "Subscribing...",
@@ -101,7 +101,7 @@
     "linkPlaceholder": "https://website.com or booking link",
     "submitting": "Submitting...",
     "submitButton": "Submit Event",
-    "reviewNotice": "Events are reviewed before appearing on Mazunte Connect."
+    "reviewNotice": "Events are reviewed before appearing on Mazunte Today."
   },
   "days": {
     "mon": "Mon",
@@ -153,15 +153,15 @@
     "backHome": "Back to homepage"
   },
   "metadata": {
-    "title": "Mazunte Connect",
+    "title": "Mazunte Today",
     "description": "The living pulse of Mazunte. Events, ceremonies, classes, food & community — all in one place.",
-    "searchTitle": "Search · Mazunte Connect",
-    "submitTitle": "Submit Event · Mazunte Connect",
-    "submitDescription": "List your event, class, or ceremony on Mazunte Connect.",
-    "placesTitle": "Places · Mazunte Connect",
+    "searchTitle": "Search · Mazunte Today",
+    "submitTitle": "Submit Event · Mazunte Today",
+    "submitDescription": "List your event, class, or ceremony on Mazunte Today.",
+    "placesTitle": "Places · Mazunte Today",
     "placesDescription": "Discover venues and spaces hosting events in Mazunte",
-    "eventNotFound": "Event Not Found · Mazunte Connect",
-    "categoriesTitle": "Categories · Mazunte Connect",
+    "eventNotFound": "Event Not Found · Mazunte Today",
+    "categoriesTitle": "Categories · Mazunte Today",
     "categoriesDescription": "Browse yoga, music, ceremony, food, wellness and more events in Mazunte"
   }
 }
