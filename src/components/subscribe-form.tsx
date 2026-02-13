@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { subscribe } from "@/actions/subscribe";
 import { useTranslations } from "next-intl";
+import posthog from "posthog-js";
 
 export function SubscribeForm() {
   const [email, setEmail] = useState("");
@@ -23,6 +24,7 @@ export function SubscribeForm() {
     setLoading(false);
     if (result.success) {
       setSubmitted(true);
+      posthog.capture("subscribed");
     } else {
       setError(result.error || t("error"));
     }

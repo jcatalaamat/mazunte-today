@@ -104,7 +104,7 @@ export async function getEventById(eventId: string) {
   return event || null;
 }
 
-type Category = "yoga" | "music" | "ceremony" | "food" | "wellness" | "community" | "market" | "other";
+type Category = "yoga" | "music" | "ceremony" | "food" | "wellness" | "community" | "market" | "family" | "other";
 
 export async function updateEvent(
   eventId: string,

@@ -28,7 +28,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
 
   async function handleUpdate(formData: FormData) {
     "use server";
-    type Category = "yoga" | "music" | "ceremony" | "food" | "wellness" | "community" | "market" | "other";
+    type Category = "yoga" | "music" | "ceremony" | "food" | "wellness" | "community" | "market" | "family" | "other";
     const data = {
       title: formData.get("title") as string,
       description: (formData.get("description") as string) || null,

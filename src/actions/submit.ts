@@ -8,7 +8,7 @@ import { z } from "zod";
 const submitEventSchema = z.object({
   title: z.string().min(2, "Title is required"),
   description: z.string().optional(),
-  category: z.enum(["yoga", "music", "ceremony", "food", "wellness", "community", "market", "other"]),
+  category: z.enum(["yoga", "music", "ceremony", "food", "wellness", "community", "market", "family", "other"]),
   venueName: z.string().min(1, "Venue name is required"),
   placeId: z.string().optional(),
   mapsUrl: z.string().optional(),

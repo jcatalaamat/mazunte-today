@@ -1,11 +1,12 @@
 "use client";
 
-import { useActionState, useState, useRef } from "react";
+import { useActionState, useState, useRef, useEffect } from "react";
 import { submitEvent, type SubmitEventState } from "@/actions/submit";
 import { uploadImage } from "@/actions/upload";
 import Image from "next/image";
 import { PlacesAutocomplete, type PlaceResult } from "./places-autocomplete";
 import { useTranslations } from "next-intl";
+import posthog from "posthog-js";
 
 const categoryKeys = ["yoga", "music", "ceremony", "food", "wellness", "community", "market", "family", "other"];
 const dayKeys = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
@@ -72,6 +73,12 @@ export function SubmitEventForm() {
     setImages((prev) => prev.filter((_, i) => i !== index));
     setImageError(null);
   }
+
+  useEffect(() => {
+    if (state.success) {
+      posthog.capture("event_submitted");
+    }
+  }, [state.success]);
 
   if (state.success) {
     return (

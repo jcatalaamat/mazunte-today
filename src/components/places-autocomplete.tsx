@@ -97,7 +97,7 @@ export function PlacesAutocomplete({
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
 
-      if (place.place_id && place.geometry?.location) {
+      if (place.place_id) {
         const result: PlaceResult = {
           placeId: place.place_id,
           name: place.name || "",

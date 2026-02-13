@@ -33,11 +33,10 @@ export function getMazunteNow(): string {
 
 /** Get a date N days from today */
 export function getDateOffset(days: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() + days);
-  return d.toLocaleDateString("en-CA", {
-    timeZone: "America/Mexico_City",
-  });
+  const now = new Date();
+  const mazunteDate = new Date(now.toLocaleString("en-US", { timeZone: "America/Mexico_City" }));
+  mazunteDate.setDate(mazunteDate.getDate() + days);
+  return mazunteDate.toLocaleDateString("en-CA");
 }
 
 /** Day of week abbreviation from date string */
