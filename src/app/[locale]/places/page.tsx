@@ -30,9 +30,22 @@ export default async function PlacesPage() {
       <section className="px-6 py-12 sm:px-10">
         <div className="max-w-4xl mx-auto">
           <h1 className="font-serif text-3xl sm:text-4xl mb-3">{t("title")}</h1>
-          <p className="text-text-soft mb-10">
+          <p className="text-text-soft mb-6">
             {t("description")}
           </p>
+
+          {/* Area map */}
+          <div className="mb-10 rounded-2xl overflow-hidden border border-black/10">
+            <iframe
+              width="100%"
+              height="280"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              src={`https://www.google.com/maps/embed/v1/search?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=venues+in+Mazunte+Oaxaca&center=15.665,-96.55&zoom=14`}
+              className="w-full"
+              title="Mazunte area map"
+            />
+          </div>
 
           {venues.length === 0 ? (
             <p className="text-text-soft">{t("noVenues")}</p>

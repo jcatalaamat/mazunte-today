@@ -51,6 +51,12 @@ export default async function AdminPage() {
             </div>
             <div className="flex items-center gap-4">
               <Link
+                href="/admin/import"
+                className="text-sm text-ocean hover:text-ocean/80 transition-colors"
+              >
+                Import →
+              </Link>
+              <Link
                 href="/admin/events"
                 className="text-sm text-ocean hover:text-ocean/80 transition-colors"
               >

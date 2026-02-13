@@ -65,6 +65,20 @@ export default async function VenuePage({
 
           <h1 className="font-serif text-3xl sm:text-4xl mb-3">{result.venueName}</h1>
 
+          {result.placeId && (
+            <div className="mb-8 rounded-2xl overflow-hidden border border-black/10">
+              <iframe
+                width="100%"
+                height="250"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=place_id:${result.placeId}&zoom=16`}
+                className="w-full"
+                title={result.venueName}
+              />
+            </div>
+          )}
+
           {result.mapsUrl && (
             <a
               href={result.mapsUrl}

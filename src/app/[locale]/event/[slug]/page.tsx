@@ -126,6 +126,20 @@ export default async function EventPage({
             )}
           </div>
 
+          {event.placeId && (
+            <div className="mb-4 rounded-2xl overflow-hidden border border-black/10">
+              <iframe
+                width="100%"
+                height="200"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=place_id:${event.placeId}&zoom=16`}
+                className="w-full"
+                title={event.venueName || ""}
+              />
+            </div>
+          )}
+
           {event.mapsUrl && (
             <div className="mb-10">
               <a
