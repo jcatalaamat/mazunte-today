@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
 import { getEventBySlug } from "@/actions/events";
+import { getPractitionerForEvent } from "@/actions/practitioners";
 import { notFound } from "next/navigation";
 import { categoryConfig, formatTime, getDayOfWeek } from "@/lib/utils";
 import { Link } from "@/i18n/navigation";
@@ -40,6 +41,7 @@ export default async function EventPage({
 
   const { event, upcomingOccurrences } = result;
   const cat = categoryConfig[event.category] || categoryConfig.other;
+  const practitioner = await getPractitionerForEvent(event.practitionerId);
   const t = await getTranslations("event");
   const tc = await getTranslations("categories");
 
@@ -105,10 +107,19 @@ export default async function EventPage({
                 <span>{event.venueName}</span>
               </div>
             )}
-            {event.organizerName && (
+            {(practitioner || event.organizerName) && (
               <div className="flex items-center gap-3 text-text">
                 <span className="text-lg">👤</span>
-                <span>{event.organizerName}</span>
+                {practitioner ? (
+                  <Link
+                    href={`/practitioners/${practitioner.slug}`}
+                    className="text-ocean hover:text-ocean-light transition-colors"
+                  >
+                    {practitioner.name}
+                  </Link>
+                ) : (
+                  <span>{event.organizerName}</span>
+                )}
               </div>
             )}
             <div className="flex items-center gap-3 text-text">

@@ -52,6 +52,7 @@ export const events = pgTable(
     contactInstagram: text("contact_instagram"),
     contactLink: text("contact_link"),
     images: jsonb("images").$type<string[]>().default([]),
+    practitionerId: text("practitioner_id"),
     createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { mode: "string" }),
   },
@@ -63,6 +64,7 @@ export const events = pgTable(
     index("events_is_featured_idx").on(table.isFeatured),
     index("events_start_time_idx").on(table.startTime),
     index("events_place_id_idx").on(table.placeId),
+    index("events_practitioner_id_idx").on(table.practitionerId),
   ]
 );
 
@@ -96,5 +98,56 @@ export const subscribers = pgTable(
   },
   (table) => [
     unique("subscribers_email_unique").on(table.email),
+  ]
+);
+
+// ── Practitioners ───────────────────────────────────────
+export const practitioners = pgTable(
+  "practitioners",
+  {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+    slug: text("slug").notNull(),
+    bio: text("bio"),
+    shortBio: text("short_bio"),
+    categories: jsonb("categories").$type<string[]>().default([]),
+    profileImage: text("profile_image"),
+    images: jsonb("images").$type<string[]>().default([]),
+    venueName: text("venue_name"),
+    placeId: text("place_id"),
+    mapsUrl: text("maps_url"),
+    contactWhatsapp: text("contact_whatsapp"),
+    contactInstagram: text("contact_instagram"),
+    contactLink: text("contact_link"),
+    isApproved: boolean("is_approved").notNull().default(false),
+    isFeatured: boolean("is_featured").notNull().default(false),
+    createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { mode: "string" }),
+  },
+  (table) => [
+    unique("practitioners_slug_unique").on(table.slug),
+    index("practitioners_is_approved_idx").on(table.isApproved),
+    index("practitioners_is_featured_idx").on(table.isFeatured),
+  ]
+);
+
+// ── Services ────────────────────────────────────────────
+export const services = pgTable(
+  "services",
+  {
+    id: text("id").primaryKey(),
+    practitionerId: text("practitioner_id")
+      .notNull()
+      .references(() => practitioners.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    description: text("description"),
+    duration: text("duration"),
+    price: text("price"),
+    category: categoryEnum("category").default("other"),
+    sortOrder: text("sort_order").default("0"),
+    createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("services_practitioner_id_idx").on(table.practitionerId),
   ]
 );

@@ -63,6 +63,12 @@ export default async function AdminPage() {
                 Events →
               </Link>
               <Link
+                href="/admin/practitioners"
+                className="text-sm text-ocean hover:text-ocean/80 transition-colors"
+              >
+                Practitioners →
+              </Link>
+              <Link
                 href="/admin/subscribers"
                 className="text-sm text-ocean hover:text-ocean/80 transition-colors"
               >

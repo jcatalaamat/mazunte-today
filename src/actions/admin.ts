@@ -1,10 +1,10 @@
 "use server";
 
 import { db } from "@/db";
-import { events, eventOccurrences, subscribers } from "@/db/schema";
+import { events, eventOccurrences, subscribers, practitioners, services } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { expandRecurrence } from "@/lib/recurrence";
-import { getMazunteToday } from "@/lib/utils";
+import { createId, getMazunteToday } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -205,4 +205,131 @@ export async function getSubscribers() {
 export async function deleteSubscriber(id: string) {
   await db.delete(subscribers).where(eq(subscribers.id, id));
   revalidatePath("/admin/subscribers");
+}
+
+// ── Practitioner Admin Actions ──────────────────────────
+
+export async function getPendingPractitioners() {
+  return db
+    .select()
+    .from(practitioners)
+    .where(eq(practitioners.isApproved, false))
+    .orderBy(practitioners.createdAt);
+}
+
+export async function getApprovedPractitionersList() {
+  return db
+    .select()
+    .from(practitioners)
+    .where(eq(practitioners.isApproved, true))
+    .orderBy(practitioners.createdAt);
+}
+
+export async function getPractitionerById(practitionerId: string) {
+  const [practitioner] = await db
+    .select()
+    .from(practitioners)
+    .where(eq(practitioners.id, practitionerId))
+    .limit(1);
+  return practitioner || null;
+}
+
+export async function getPractitionerServicesById(practitionerId: string) {
+  return db
+    .select()
+    .from(services)
+    .where(eq(services.practitionerId, practitionerId))
+    .orderBy(services.sortOrder, services.createdAt);
+}
+
+export async function approvePractitioner(practitionerId: string) {
+  await db
+    .update(practitioners)
+    .set({ isApproved: true, updatedAt: new Date().toISOString() })
+    .where(eq(practitioners.id, practitionerId));
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+}
+
+export async function rejectPractitioner(practitionerId: string) {
+  // Services cascade-deleted via FK
+  await db.delete(practitioners).where(eq(practitioners.id, practitionerId));
+  revalidatePath("/admin");
+}
+
+export async function updatePractitioner(
+  practitionerId: string,
+  data: {
+    name?: string;
+    bio?: string | null;
+    shortBio?: string | null;
+    categories?: string[];
+    profileImage?: string | null;
+    venueName?: string | null;
+    placeId?: string | null;
+    mapsUrl?: string | null;
+    contactWhatsapp?: string | null;
+    contactInstagram?: string | null;
+    contactLink?: string | null;
+    isFeatured?: boolean;
+  }
+) {
+  await db
+    .update(practitioners)
+    .set({ ...data, updatedAt: new Date().toISOString() })
+    .where(eq(practitioners.id, practitionerId));
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+}
+
+export async function updatePractitionerServices(
+  practitionerId: string,
+  servicesList: {
+    name: string;
+    description?: string | null;
+    duration?: string | null;
+    price?: string | null;
+    category?: string;
+  }[]
+) {
+  // Full replace strategy
+  await db.delete(services).where(eq(services.practitionerId, practitionerId));
+
+  if (servicesList.length > 0) {
+    await db.insert(services).values(
+      servicesList.map((s, i) => ({
+        id: createId(),
+        practitionerId,
+        name: s.name,
+        description: s.description || null,
+        duration: s.duration || null,
+        price: s.price || null,
+        category: (s.category as Category) || "other",
+        sortOrder: String(i),
+      }))
+    );
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+}
+
+export async function togglePractitionerFeatured(practitionerId: string) {
+  const [practitioner] = await db
+    .select()
+    .from(practitioners)
+    .where(eq(practitioners.id, practitionerId))
+    .limit(1);
+
+  if (!practitioner) throw new Error("Practitioner not found");
+
+  await db
+    .update(practitioners)
+    .set({ isFeatured: !practitioner.isFeatured, updatedAt: new Date().toISOString() })
+    .where(eq(practitioners.id, practitionerId));
+
+  revalidatePath("/");
+  revalidatePath("/admin");
 }
