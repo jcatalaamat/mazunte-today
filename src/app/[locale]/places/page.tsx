@@ -100,6 +100,18 @@ export default async function PlacesPage() {
               ))}
             </div>
           )}
+          <div className="mt-16 bg-ocean/5 rounded-2xl p-8 text-center">
+            <h2 className="font-serif text-xl mb-2">{t("venueCta")}</h2>
+            <p className="text-text-soft text-sm mb-5">{t("venueCtaDescription")}</p>
+            <a
+              href="https://wa.me/529581169947?text=Hola!%20Tengo%20un%20lugar%20en%20Mazunte%20y%20quiero%20compartir%20mi%20calendario%20de%20eventos%20en%20Mazunte%20Today."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#25D366] text-white font-medium text-sm hover:opacity-90 transition-opacity"
+            >
+              {t("venueCtaButton")}
+            </a>
+          </div>
         </div>
       </section>
     </main>

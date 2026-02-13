@@ -3,6 +3,7 @@ import { getEventsByVenue } from "@/actions/events";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { categoryConfig, formatTime, getDayOfWeek, formatDate } from "@/lib/utils";
+import { ShareEvent } from "@/components/share-event";
 import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
@@ -28,9 +29,9 @@ export async function generateMetadata({
 export default async function VenuePage({
   params,
 }: {
-  params: Promise<{ venue: string }>;
+  params: Promise<{ venue: string; locale: string }>;
 }) {
-  const { venue } = await params;
+  const { venue, locale } = await params;
   const decodedVenue = decodeURIComponent(venue);
   const result = await getEventsByVenue(decodedVenue);
 
@@ -75,9 +76,16 @@ export default async function VenuePage({
             </a>
           )}
 
-          <p className="text-text-soft mb-10">
+          <p className="text-text-soft mb-6">
             {t("upcomingEvents", { count: result.events.length })}
           </p>
+
+          <div className="mb-10">
+            <ShareEvent
+              title={`${result.venueName} — Mazunte Today`}
+              url={`https://mazunte.today/${locale}/places/${encodeURIComponent(result.venueName)}`}
+            />
+          </div>
 
           <div className="space-y-8">
             {Object.entries(eventsByDate).map(([date, events]) => (

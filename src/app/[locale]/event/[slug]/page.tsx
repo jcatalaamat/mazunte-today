@@ -5,6 +5,7 @@ import { categoryConfig, formatTime, getDayOfWeek } from "@/lib/utils";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { AddToCalendar } from "@/components/add-to-calendar";
+import { ShareEvent } from "@/components/share-event";
 import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
@@ -28,9 +29,9 @@ export async function generateMetadata({
 export default async function EventPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const result = await getEventBySlug(slug);
 
   if (!result) {
@@ -172,6 +173,13 @@ export default async function EventPage({
               )}
             </div>
           )}
+
+          <div className="mb-10">
+            <ShareEvent
+              title={event.title}
+              url={`https://mazunte.today/${locale}/event/${event.slug}`}
+            />
+          </div>
 
           {upcomingOccurrences.length > 0 && (
             <div>

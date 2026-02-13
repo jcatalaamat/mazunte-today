@@ -122,6 +122,12 @@
     "upcomingDates": "Proximas Fechas",
     "notFound": "Evento No Encontrado"
   },
+  "share": {
+    "whatsapp": "Compartir en WhatsApp",
+    "copyLink": "Copiar Link",
+    "copied": "Copiado!",
+    "shareEvent": "Compartir este evento"
+  },
   "calendar": {
     "googleCalendar": "Google Calendar",
     "downloadIcs": "Descargar .ics"
@@ -134,7 +140,10 @@
     "upcomingEvents": "{count, plural, one {# evento proximo} other {# eventos proximos}}",
     "viewAll": "Ver los {count} eventos",
     "allPlaces": "← Todos los lugares",
-    "by": "por {name}"
+    "by": "por {name}",
+    "venueCta": "Tienes un lugar en Mazunte?",
+    "venueCtaDescription": "Mandanos tu calendario semanal y publicamos tus eventos gratis.",
+    "venueCtaButton": "Enviar tu calendario por WhatsApp"
   },
   "categoryPage": {
     "title": "Categorias",

@@ -122,6 +122,12 @@
     "upcomingDates": "Upcoming Dates",
     "notFound": "Event Not Found"
   },
+  "share": {
+    "whatsapp": "Share on WhatsApp",
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "shareEvent": "Share this event"
+  },
   "calendar": {
     "googleCalendar": "Google Calendar",
     "downloadIcs": "Download .ics"
@@ -134,7 +140,10 @@
     "upcomingEvents": "{count, plural, one {# upcoming event} other {# upcoming events}}",
     "viewAll": "View all {count} events",
     "allPlaces": "← All places",
-    "by": "by {name}"
+    "by": "by {name}",
+    "venueCta": "Run a venue in Mazunte?",
+    "venueCtaDescription": "Send us your weekly schedule and we'll list your events for free.",
+    "venueCtaButton": "Send your schedule via WhatsApp"
   },
   "categoryPage": {
     "title": "Categories",

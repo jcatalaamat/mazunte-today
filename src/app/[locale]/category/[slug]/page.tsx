@@ -3,6 +3,7 @@ import { getEventsByCategory, type EventWithOccurrence } from "@/actions/events"
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { categoryConfig, isValidCategory, formatTime, formatDate } from "@/lib/utils";
+import { ShareEvent } from "@/components/share-event";
 import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
@@ -29,9 +30,9 @@ export async function generateMetadata({
 export default async function CategoryDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
 
   if (!isValidCategory(slug)) {
     notFound();
@@ -76,9 +77,16 @@ export default async function CategoryDetailPage({
             <h1 className="font-serif text-3xl sm:text-4xl">{tc(slug)}</h1>
           </div>
 
-          <p className="text-text-soft mb-10">
+          <p className="text-text-soft mb-6">
             {t("eventCount", { count: eventsData.length })}
           </p>
+
+          <div className="mb-10">
+            <ShareEvent
+              title={`${config.emoji} ${tc(slug)} — Mazunte Today`}
+              url={`https://mazunte.today/${locale}/category/${slug}`}
+            />
+          </div>
 
           {eventsData.length === 0 ? (
             <div className="text-center py-12">
