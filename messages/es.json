@@ -137,6 +137,11 @@
     "en": "EN",
     "es": "ES"
   },
+  "notFound": {
+    "title": "Pagina no encontrada",
+    "description": "La pagina que buscas no existe o fue movida.",
+    "backHome": "Volver al inicio"
+  },
   "metadata": {
     "title": "Mazunte Connect",
     "description": "El pulso vivo de Mazunte. Eventos, ceremonias, clases, comida y comunidad — todo en un solo lugar.",

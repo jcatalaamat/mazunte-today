@@ -31,6 +31,24 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("description"),
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      siteName: "Mazunte Connect",
+      locale: locale === "es" ? "es_MX" : "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+    },
+    alternates: {
+      languages: {
+        en: "/en",
+        es: "/es",
+      },
+    },
   };
 }
 
