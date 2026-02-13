@@ -3,7 +3,8 @@
     "places": "Lugares",
     "search": "Buscar",
     "addEvent": "+ Agregar Evento",
-    "categories": "Categorias"
+    "categories": "Categorias",
+    "about": "Info"
   },
   "hero": {
     "whatsHappening": "Que esta pasando",
@@ -156,6 +157,29 @@
     "en": "EN",
     "es": "ES"
   },
+  "about": {
+    "title": "Sobre Mazunte Today",
+    "description": "Un tablero de eventos gratuito y comunitario para Mazunte y la costa oaxaquena.",
+    "howItWorks": "Como funciona",
+    "howStep1": "Cualquiera puede enviar un evento a traves de nuestro formulario — toma 2 minutos.",
+    "howStep2": "Revisamos y aprobamos los eventos en pocas horas.",
+    "howStep3": "Tu evento aparece en la pagina principal, por categoria y en la busqueda.",
+    "faqTitle": "Preguntas frecuentes",
+    "faq1q": "Es gratis publicar un evento?",
+    "faq1a": "Si, completamente gratis. Queremos que todos los eventos en Mazunte sean faciles de encontrar.",
+    "faq2q": "Que tan rapido se aprueban los eventos?",
+    "faq2a": "Normalmente en pocas horas. Revisamos las solicitudes todos los dias.",
+    "faq3q": "Puedo publicar eventos recurrentes?",
+    "faq3a": "Si! Al enviar tu evento, activa la opcion de \"recurrente\" y selecciona los dias de la semana. Generamos todas las fechas automaticamente.",
+    "faq4q": "Tengo un lugar. Pueden publicar todos mis eventos?",
+    "faq4a": "Claro que si. Mandanos tu calendario semanal por WhatsApp y nosotros lo agregamos todo.",
+    "faq5q": "Como edito o elimino mi evento?",
+    "faq5a": "Mandanos un mensaje por WhatsApp y lo actualizamos o eliminamos de inmediato.",
+    "contactTitle": "Contacto",
+    "contactDescription": "Preguntas, ideas, o solo quieres saludar? Escribenos por WhatsApp.",
+    "contactButton": "Escribenos por WhatsApp",
+    "madeWith": "Hecho con amor en la costa oaxaquena"
+  },
   "notFound": {
     "title": "Pagina no encontrada",
     "description": "La pagina que buscas no existe o fue movida.",
@@ -171,6 +195,7 @@
     "placesDescription": "Descubre espacios y lugares que organizan eventos en Mazunte",
     "eventNotFound": "Evento No Encontrado · Mazunte Today",
     "categoriesTitle": "Categorias · Mazunte Today",
-    "categoriesDescription": "Explora yoga, musica, ceremonias, comida, bienestar y mas eventos en Mazunte"
+    "categoriesDescription": "Explora yoga, musica, ceremonias, comida, bienestar y mas eventos en Mazunte",
+    "aboutTitle": "Sobre · Mazunte Today"
   }
 }

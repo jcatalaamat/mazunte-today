@@ -61,9 +61,14 @@ export default async function Home() {
 
       <SubscribeForm />
 
-      <p className="text-[0.7rem] text-text-lighter px-6 pb-10 text-center">
-        {t("footer")}
-      </p>
+      <footer className="px-6 pb-10 text-center">
+        <Link
+          href="/about"
+          className="text-[0.7rem] text-text-lighter hover:text-text-soft transition-colors"
+        >
+          {t("footer")}
+        </Link>
+      </footer>
     </main>
   );
 }

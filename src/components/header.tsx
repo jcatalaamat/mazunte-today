@@ -122,6 +122,13 @@ export function Header() {
             >
               {t("addEvent")}
             </Link>
+            <Link
+              href="/about"
+              onClick={() => setMenuOpen(false)}
+              className="py-2.5 text-sm font-medium text-text-lighter hover:text-text transition-colors"
+            >
+              {t("about")}
+            </Link>
           </nav>
         </div>
       )}

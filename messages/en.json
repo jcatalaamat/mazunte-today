@@ -3,7 +3,8 @@
     "places": "Places",
     "search": "Search",
     "addEvent": "+ Add Event",
-    "categories": "Categories"
+    "categories": "Categories",
+    "about": "About"
   },
   "hero": {
     "whatsHappening": "What's happening",
@@ -156,6 +157,29 @@
     "en": "EN",
     "es": "ES"
   },
+  "about": {
+    "title": "About Mazunte Today",
+    "description": "A free, community-powered events board for Mazunte and the Oaxacan coast.",
+    "howItWorks": "How it works",
+    "howStep1": "Anyone can submit an event through our form — it takes 2 minutes.",
+    "howStep2": "We review and approve events within a few hours.",
+    "howStep3": "Your event appears on the homepage, category pages, and search.",
+    "faqTitle": "FAQ",
+    "faq1q": "Is it free to list an event?",
+    "faq1a": "Yes, completely free. We want every event in Mazunte to be discoverable.",
+    "faq2q": "How fast do events get approved?",
+    "faq2a": "Usually within a few hours. We review submissions daily.",
+    "faq3q": "Can I list recurring events?",
+    "faq3a": "Yes! When submitting, toggle \"recurring\" and select the days of the week. We'll generate all the dates automatically.",
+    "faq4q": "I run a venue. Can you list all my events?",
+    "faq4a": "Absolutely. Send us your weekly schedule via WhatsApp and we'll add everything for you.",
+    "faq5q": "How do I edit or remove my event?",
+    "faq5a": "Send us a message on WhatsApp and we'll update or remove it right away.",
+    "contactTitle": "Get in touch",
+    "contactDescription": "Questions, ideas, or just want to say hi? Reach out on WhatsApp.",
+    "contactButton": "Message us on WhatsApp",
+    "madeWith": "Made with love on the Oaxacan coast"
+  },
   "notFound": {
     "title": "Page not found",
     "description": "The page you're looking for doesn't exist or has been moved.",
@@ -171,6 +195,7 @@
     "placesDescription": "Discover venues and spaces hosting events in Mazunte",
     "eventNotFound": "Event Not Found · Mazunte Today",
     "categoriesTitle": "Categories · Mazunte Today",
-    "categoriesDescription": "Browse yoga, music, ceremony, food, wellness and more events in Mazunte"
+    "categoriesDescription": "Browse yoga, music, ceremony, food, wellness and more events in Mazunte",
+    "aboutTitle": "About · Mazunte Today"
   }
 }

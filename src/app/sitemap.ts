@@ -4,7 +4,7 @@ const BASE_URL = "https://mazunte.today";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const locales = ["en", "es"];
-  const routes = ["", "/places", "/category", "/search", "/submit"];
+  const routes = ["", "/places", "/category", "/search", "/submit", "/about"];
   const categories = ["yoga", "music", "ceremony", "food", "wellness", "community", "market", "family", "other"];
 
   const entries: MetadataRoute.Sitemap = [];
