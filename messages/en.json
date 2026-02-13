@@ -17,6 +17,7 @@
     "beFirst": "Be the first to share what's happening in Mazunte!",
     "addAnEvent": "+ Add an Event",
     "todaysTimeline": "Today's Timeline",
+    "featuredPractitioners": "Meet the Community",
     "footer": "Mazunte Today · Made with love on the Oaxacan coast"
   },
   "happeningNow": {
@@ -62,11 +63,13 @@
     "error": "Something went wrong"
   },
   "search": {
-    "title": "Search Events",
-    "placeholder": "Search by name, venue, or organizer...",
+    "title": "Search",
+    "placeholder": "Search events, practitioners, venues...",
     "results": "{count, plural, one {# result} other {# results}} for \"{query}\"",
-    "noResults": "No events found",
-    "tryDifferent": "Try a different search term or browse the homepage."
+    "noResults": "No results found",
+    "tryDifferent": "Try a different search term or browse the homepage.",
+    "eventsSection": "Events",
+    "practitionersSection": "Practitioners"
   },
   "submit": {
     "pageTitle": "List your event",
@@ -154,14 +157,17 @@
     "by": "by {name}",
     "venueCta": "Run a venue in Mazunte?",
     "venueCtaDescription": "Send us your weekly schedule and we'll list your events for free.",
-    "venueCtaButton": "Send your schedule via WhatsApp"
+    "venueCtaButton": "Send your schedule via WhatsApp",
+    "practitioners": "Practitioners at this venue"
   },
   "categoryPage": {
     "title": "Categories",
     "description": "Browse events by category in Mazunte",
     "allCategories": "← All categories",
     "eventCount": "{count, plural, one {# upcoming event} other {# upcoming events}}",
-    "noEvents": "No upcoming events in this category."
+    "noEvents": "No upcoming events in this category.",
+    "practitioners": "Practitioners",
+    "practitionerCount": "{count, plural, one {# practitioner} other {# practitioners}}"
   },
   "language": {
     "en": "EN",
@@ -260,6 +266,8 @@
     "eventNotFound": "Event Not Found · Mazunte Today",
     "categoriesTitle": "Categories · Mazunte Today",
     "categoriesDescription": "Browse yoga, music, ceremony, food, wellness and more events in Mazunte",
+    "categoryDescription": "Discover {category} events, classes, and activities in Mazunte",
+    "venueDescription": "Events and activities at {venue} in Mazunte",
     "aboutTitle": "About · Mazunte Today",
     "aboutDescription": "Learn about Mazunte Today — the community-powered events board for Mazunte, Zipolite, and San Agustinillo",
     "practitionersTitle": "Practitioners · Mazunte Today",

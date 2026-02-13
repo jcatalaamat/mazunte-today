@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: "/admin/",
+        disallow: ["/admin/", "/api/"],
       },
     ],
     sitemap: "https://mazunte.today/sitemap.xml",

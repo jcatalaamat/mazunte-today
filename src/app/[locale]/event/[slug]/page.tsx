@@ -9,7 +9,7 @@ import { AddToCalendar } from "@/components/add-to-calendar";
 import { ShareEvent } from "@/components/share-event";
 import { getTranslations } from "next-intl/server";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,
@@ -21,9 +21,16 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "metadata" });
   if (!result) return { title: t("eventNotFound") };
 
+  const images = (result.event.images as string[]) || [];
   return {
     title: `${result.event.title} · Mazunte Today`,
     description: result.event.description || `${result.event.title} in Mazunte`,
+    openGraph: {
+      title: result.event.title,
+      description: result.event.description || `${result.event.title} in Mazunte`,
+      images: images.length > 0 ? [images[0]] : [],
+      type: "article",
+    },
   };
 }
 
@@ -64,6 +71,7 @@ export default async function EventPage({
                   src={(event.images as string[])[0]}
                   alt={event.title}
                   fill
+                  sizes="(max-width: 640px) 100vw, 672px"
                   className="object-cover"
                   priority
                 />
@@ -77,6 +85,7 @@ export default async function EventPage({
                         src={img}
                         alt={`${event.title} - image ${index + 2}`}
                         fill
+                        sizes="(max-width: 640px) 50vw, 168px"
                         className="object-cover"
                       />
                     </div>
@@ -205,6 +214,45 @@ export default async function EventPage({
               url={`https://mazunte.today/${locale}/event/${event.slug}`}
             />
           </div>
+
+          {/* JSON-LD Structured Data */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Event",
+                name: event.title,
+                description: event.description || undefined,
+                image: (event.images as string[])?.[0] || undefined,
+                startDate: upcomingOccurrences[0]
+                  ? `${upcomingOccurrences[0].date}T${upcomingOccurrences[0].startTime}`
+                  : undefined,
+                endDate:
+                  upcomingOccurrences[0]?.endTime
+                    ? `${upcomingOccurrences[0].date}T${upcomingOccurrences[0].endTime}`
+                    : undefined,
+                location: event.venueName
+                  ? {
+                      "@type": "Place",
+                      name: event.venueName,
+                      address: {
+                        "@type": "PostalAddress",
+                        addressLocality: "Mazunte",
+                        addressRegion: "Oaxaca",
+                        addressCountry: "MX",
+                      },
+                    }
+                  : undefined,
+                organizer: practitioner
+                  ? { "@type": "Person", name: practitioner.name }
+                  : event.organizerName
+                    ? { "@type": "Person", name: event.organizerName }
+                    : undefined,
+                eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+              }),
+            }}
+          />
 
           {upcomingOccurrences.length > 0 && (
             <div>

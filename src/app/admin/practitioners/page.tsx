@@ -5,6 +5,7 @@ import { LogoutButton } from "../logout-button";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { categoryConfig } from "@/lib/utils";
+import { AdminNav } from "@/components/admin-nav";
 
 export const metadata = {
   title: "Manage Practitioners · Mazunte Today",
@@ -24,23 +25,16 @@ export default async function AdminPractitionersPage() {
       <Header />
       <section className="px-6 py-12 sm:px-10">
         <div className="max-w-2xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-            <div>
-              <h1 className="font-serif text-2xl mb-1">Practitioners</h1>
-              <p className="text-text-soft text-sm">
-                {pending.length} pending · {approved.length} approved
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href="/admin"
-                className="text-sm text-ocean hover:text-ocean/80 transition-colors"
-              >
-                ← Events
-              </Link>
-              <LogoutButton />
-            </div>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="font-serif text-2xl">Practitioners</h1>
+            <LogoutButton />
           </div>
+
+          <AdminNav />
+
+          <p className="text-text-soft text-sm mb-6">
+            {pending.length} pending · {approved.length} approved
+          </p>
 
           {/* Pending */}
           <div className="mb-12">

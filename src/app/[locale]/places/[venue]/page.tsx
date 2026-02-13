@@ -1,5 +1,7 @@
 import { Header } from "@/components/header";
 import { getEventsByVenue } from "@/actions/events";
+import { getPractitionersByVenue } from "@/actions/practitioners";
+import { PractitionerCard } from "@/components/practitioner-card";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { categoryConfig, formatTime, getDayOfWeek, formatDate } from "@/lib/utils";
@@ -22,7 +24,12 @@ export async function generateMetadata({
 
   return {
     title: `${result.venueName} · Mazunte Today`,
-    description: `Events at ${result.venueName} in Mazunte`,
+    description: `${t("venueDescription", { venue: result.venueName })}`,
+    openGraph: {
+      title: result.venueName,
+      description: `${t("venueDescription", { venue: result.venueName })}`,
+      type: "place",
+    },
   };
 }
 
@@ -39,6 +46,7 @@ export default async function VenuePage({
     notFound();
   }
 
+  const venuePractitioners = await getPractitionersByVenue(result.venueName);
   const t = await getTranslations("places");
   const tc = await getTranslations("categories");
 
@@ -140,6 +148,17 @@ export default async function VenuePage({
               </div>
             ))}
           </div>
+
+          {venuePractitioners.length > 0 && (
+            <div className="mt-12">
+              <h2 className="font-serif text-xl mb-4">{t("practitioners")}</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {venuePractitioners.map((p) => (
+                  <PractitionerCard key={p.id} practitioner={p} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </main>

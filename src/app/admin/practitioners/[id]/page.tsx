@@ -3,6 +3,7 @@ import { getPractitionerById, getPractitionerServicesById, isAdminAuthenticated,
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { categoryConfig } from "@/lib/utils";
+import { AdminServicesEditor } from "@/components/admin-services-editor";
 
 export const metadata = {
   title: "Edit Practitioner · Mazunte Today",
@@ -179,29 +180,16 @@ export default async function EditPractitionerPage({ params }: { params: Promise
               />
             </div>
 
-            {/* Services — serialized as JSON */}
-            <div>
-              <label className="block text-sm font-medium mb-1.5">Services (JSON)</label>
-              <textarea
-                name="servicesJson"
-                rows={6}
-                defaultValue={JSON.stringify(
-                  practitionerServices.map((s) => ({
-                    name: s.name,
-                    description: s.description,
-                    duration: s.duration,
-                    price: s.price,
-                    category: s.category,
-                  })),
-                  null,
-                  2
-                )}
-                className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.82rem] outline-none focus:border-ocean transition-colors resize-none font-mono"
-              />
-              <p className="text-xs text-text-lighter mt-1">
-                Edit services as JSON array. Each service: name, description, duration, price, category.
-              </p>
-            </div>
+            <AdminServicesEditor
+              initialServices={practitionerServices.map((s) => ({
+                id: s.id,
+                name: s.name,
+                description: s.description || "",
+                duration: s.duration || "",
+                price: s.price || "",
+                category: s.category || "other",
+              }))}
+            />
 
             <button
               type="submit"

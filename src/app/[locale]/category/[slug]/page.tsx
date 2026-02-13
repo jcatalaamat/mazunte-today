@@ -1,5 +1,7 @@
 import { Header } from "@/components/header";
 import { getEventsByCategory, type EventWithOccurrence } from "@/actions/events";
+import { getPractitionersByCategory } from "@/actions/practitioners";
+import { PractitionerCard } from "@/components/practitioner-card";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { categoryConfig, isValidCategory, formatTime, formatDate } from "@/lib/utils";
@@ -23,7 +25,11 @@ export async function generateMetadata({
 
   return {
     title: `${config.emoji} ${tc(slug)} · Mazunte Today`,
-    description: t("categoriesDescription"),
+    description: t("categoryDescription", { category: tc(slug) }),
+    openGraph: {
+      title: `${config.emoji} ${tc(slug)}`,
+      description: t("categoryDescription", { category: tc(slug) }),
+    },
   };
 }
 
@@ -38,7 +44,10 @@ export default async function CategoryDetailPage({
     notFound();
   }
 
-  const eventsData = await getEventsByCategory(slug);
+  const [eventsData, categoryPractitioners] = await Promise.all([
+    getEventsByCategory(slug),
+    getPractitionersByCategory(slug),
+  ]);
   const t = await getTranslations("categoryPage");
   const tc = await getTranslations("categories");
   const tp = await getTranslations("places");
@@ -133,6 +142,19 @@ export default async function CategoryDetailPage({
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+          {categoryPractitioners.length > 0 && (
+            <div className="mt-12">
+              <h2 className="font-serif text-xl mb-4">{t("practitioners")}</h2>
+              <p className="text-text-soft text-sm mb-4">
+                {t("practitionerCount", { count: categoryPractitioners.length })}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {categoryPractitioners.map((p) => (
+                  <PractitionerCard key={p.id} practitioner={p} />
+                ))}
+              </div>
             </div>
           )}
         </div>

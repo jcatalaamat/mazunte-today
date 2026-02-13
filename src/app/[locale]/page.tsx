@@ -5,6 +5,7 @@ import { CategoryFilter } from "@/components/category-pills";
 import { FeaturedEvents } from "@/components/featured-events";
 import { WeekGrid } from "@/components/week-grid";
 import { SubscribeForm } from "@/components/subscribe-form";
+import { FeaturedPractitioners } from "@/components/featured-practitioners";
 import { SectionLabel } from "@/components/section-label";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
@@ -14,17 +15,19 @@ import {
   getThisWeekEvents,
   getFeaturedEvents,
 } from "@/actions/events";
+import { getFeaturedPractitioners } from "@/actions/practitioners";
 
-export const dynamic = "force-dynamic";
 export const revalidate = 60;
 
 export default async function Home() {
-  const [happeningNow, todayEvents, weekEvents, featuredEvents] = await Promise.all([
-    getHappeningNow(),
-    getTodayEvents(),
-    getThisWeekEvents(),
-    getFeaturedEvents(),
-  ]);
+  const [happeningNow, todayEvents, weekEvents, featuredEvents, featuredPractitioners] =
+    await Promise.all([
+      getHappeningNow(),
+      getTodayEvents(),
+      getThisWeekEvents(),
+      getFeaturedEvents(),
+      getFeaturedPractitioners(),
+    ]);
 
   const t = await getTranslations("home");
   const hasNoEvents = todayEvents.length === 0 && weekEvents.length === 0;
@@ -58,6 +61,11 @@ export default async function Home() {
           <WeekGrid events={weekEvents} />
         </>
       )}
+
+      <FeaturedPractitioners
+        practitioners={featuredPractitioners}
+        title={t("featuredPractitioners")}
+      />
 
       <SubscribeForm />
 

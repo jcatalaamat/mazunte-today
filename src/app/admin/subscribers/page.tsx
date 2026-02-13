@@ -1,9 +1,9 @@
 import { Header } from "@/components/header";
 import { getSubscribers, isAdminAuthenticated, deleteSubscriber } from "@/actions/admin";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { LogoutButton } from "../logout-button";
 import { revalidatePath } from "next/cache";
+import { AdminNav } from "@/components/admin-nav";
 
 export const metadata = {
   title: "Subscribers · Mazunte Today",
@@ -35,23 +35,16 @@ export default async function SubscribersPage() {
       <Header />
       <section className="px-4 sm:px-6 py-12">
         <div className="max-w-2xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-            <div>
-              <h1 className="font-serif text-2xl mb-1">Subscribers</h1>
-              <p className="text-text-soft text-sm">
-                {subs.length} subscriber{subs.length !== 1 ? "s" : ""}
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href="/admin"
-                className="text-sm text-ocean hover:text-ocean/80 transition-colors"
-              >
-                ← Admin
-              </Link>
-              <LogoutButton />
-            </div>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="font-serif text-2xl">Subscribers</h1>
+            <LogoutButton />
           </div>
+
+          <AdminNav />
+
+          <p className="text-text-soft text-sm mb-6">
+            {subs.length} subscriber{subs.length !== 1 ? "s" : ""}
+          </p>
 
           {subs.length === 0 ? (
             <div className="text-center py-16 text-text-lighter">

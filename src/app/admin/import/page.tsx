@@ -1,8 +1,9 @@
 import { Header } from "@/components/header";
 import { isAdminAuthenticated } from "@/actions/admin";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { ImportFlow } from "./import-flow";
+import { AdminNav } from "@/components/admin-nav";
+import { LogoutButton } from "../logout-button";
 
 export const metadata = {
   title: "Import Events · Admin · Mazunte Today",
@@ -19,14 +20,13 @@ export default async function ImportPage() {
       <Header />
       <section className="px-6 py-12 sm:px-10">
         <div className="max-w-3xl mx-auto">
-          <Link
-            href="/admin"
-            className="text-sm text-ocean hover:text-ocean/80 transition-colors mb-6 inline-block"
-          >
-            ← Back to Admin
-          </Link>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="font-serif text-2xl">Import Events</h1>
+            <LogoutButton />
+          </div>
 
-          <h1 className="font-serif text-2xl mb-2">Import Events</h1>
+          <AdminNav />
+
           <p className="text-text-soft text-sm mb-8">
             Upload a WhatsApp chat export or paste multiple event texts. Select messages, combine if needed, and extract event data with AI.
           </p>

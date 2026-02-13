@@ -3,7 +3,18 @@
 import { db } from "@/db";
 import { events, eventOccurrences } from "@/db/schema";
 import { createId, slugify, getMazunteToday } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
+
+/** Strip non-digit chars except leading + for phone numbers */
+function sanitizePhone(val: string): string {
+  return val.replace(/[^\d+\s()-]/g, "").trim();
+}
+
+/** Strip @ prefix and non-alphanumeric chars from Instagram handle */
+function sanitizeInstagram(val: string): string {
+  return val.replace(/^@/, "").replace(/[^a-zA-Z0-9_.]/g, "").trim();
+}
 
 const submitEventSchema = z.object({
   title: z.string().min(2, "Title is required"),
@@ -19,8 +30,8 @@ const submitEventSchema = z.object({
   recurrenceDays: z.array(z.string()).optional(),
   recurrenceUntil: z.string().optional(),
   organizerName: z.string().min(1, "Organizer name is required"),
-  contactWhatsapp: z.string().optional(),
-  contactInstagram: z.string().optional(),
+  contactWhatsapp: z.string().regex(/^$|^\+?[\d\s\-()]+$/, "Please enter a valid phone number").optional(),
+  contactInstagram: z.string().regex(/^$|^@?[a-zA-Z0-9_.]+$/, "Please enter a valid Instagram handle").optional(),
   contactLink: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
   images: z.array(z.string().url()).optional(),
 }).refine((data) => {
@@ -124,12 +135,12 @@ export async function submitEvent(
     endTime: data.endTime ? data.endTime + ":00" : null,
     isRecurring: data.isRecurring,
     recurrencePattern: data.isRecurring && data.recurrenceDays?.length
-      ? { days: data.recurrenceDays, until: data.recurrenceUntil || "2026-12-31" }
+      ? { days: data.recurrenceDays, until: data.recurrenceUntil || getDefaultRecurrenceEnd() }
       : null,
     isFeatured: false,
     isApproved: false,
-    contactWhatsapp: data.contactWhatsapp || null,
-    contactInstagram: data.contactInstagram || null,
+    contactWhatsapp: data.contactWhatsapp ? sanitizePhone(data.contactWhatsapp) : null,
+    contactInstagram: data.contactInstagram ? sanitizeInstagram(data.contactInstagram) : null,
     contactLink: data.contactLink || null,
     images: data.images || [],
     updatedAt: null,
@@ -147,8 +158,17 @@ export async function submitEvent(
     });
   }
 
+  revalidatePath("/admin");
+
   return {
     success: true,
     message: "Event submitted! It will appear on Mazunte Today once approved.",
   };
+}
+
+/** Calculate a default recurrence end date: 1 year from today */
+function getDefaultRecurrenceEnd(): string {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() + 1);
+  return date.toISOString().slice(0, 10);
 }

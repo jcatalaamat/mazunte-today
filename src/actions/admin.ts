@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { events, eventOccurrences, subscribers, practitioners, services } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import { expandRecurrence } from "@/lib/recurrence";
 import { createId, getMazunteToday } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
@@ -44,12 +44,8 @@ export async function approveEvent(eventId: string) {
 
   if (!event) throw new Error("Event not found");
 
-  await db
-    .update(events)
-    .set({ isApproved: true, updatedAt: new Date().toISOString() })
-    .where(eq(events.id, eventId));
-
-  // If recurring, expand occurrences
+  // Expand occurrences BEFORE marking approved — if this fails,
+  // the event stays unapproved rather than being approved with no dates
   if (event.isRecurring && event.recurrencePattern) {
     const pattern = event.recurrencePattern as { days: string[]; until: string };
     const occurrences = expandRecurrence(
@@ -66,6 +62,11 @@ export async function approveEvent(eventId: string) {
       );
     }
   }
+
+  await db
+    .update(events)
+    .set({ isApproved: true, updatedAt: new Date().toISOString() })
+    .where(eq(events.id, eventId));
 
   revalidatePath("/");
   revalidatePath("/admin");
@@ -115,6 +116,7 @@ export async function updateEvent(
     venueName?: string | null;
     mapsUrl?: string | null;
     organizerName?: string | null;
+    practitionerId?: string | null;
     startTime?: string;
     endTime?: string | null;
     isFeatured?: boolean;
@@ -314,6 +316,58 @@ export async function updatePractitionerServices(
 
   revalidatePath("/");
   revalidatePath("/admin");
+}
+
+// ── Admin Stats ──────────────────────────
+
+export async function getAdminStats() {
+  const [[pendingEvents], [approvedEvents], [pendingPractitioners], [approvedPractitioners], [subscriberCount]] =
+    await Promise.all([
+      db.select({ count: sql<number>`count(*)::int` }).from(events).where(eq(events.isApproved, false)),
+      db.select({ count: sql<number>`count(*)::int` }).from(events).where(eq(events.isApproved, true)),
+      db.select({ count: sql<number>`count(*)::int` }).from(practitioners).where(eq(practitioners.isApproved, false)),
+      db.select({ count: sql<number>`count(*)::int` }).from(practitioners).where(eq(practitioners.isApproved, true)),
+      db.select({ count: sql<number>`count(*)::int` }).from(subscribers),
+    ]);
+
+  return {
+    pendingEvents: pendingEvents.count,
+    approvedEvents: approvedEvents.count,
+    pendingPractitioners: pendingPractitioners.count,
+    approvedPractitioners: approvedPractitioners.count,
+    subscribers: subscriberCount.count,
+  };
+}
+
+// ── Bulk Actions ──────────────────────────
+
+export async function bulkApproveEvents(eventIds: string[]) {
+  const results = { succeeded: 0, failed: 0 };
+  for (const id of eventIds) {
+    try {
+      await approveEvent(id);
+      results.succeeded++;
+    } catch {
+      results.failed++;
+    }
+  }
+  revalidatePath("/");
+  revalidatePath("/admin");
+  return results;
+}
+
+export async function bulkRejectEvents(eventIds: string[]) {
+  const results = { succeeded: 0, failed: 0 };
+  for (const id of eventIds) {
+    try {
+      await rejectEvent(id);
+      results.succeeded++;
+    } catch {
+      results.failed++;
+    }
+  }
+  revalidatePath("/admin");
+  return results;
 }
 
 export async function togglePractitionerFeatured(practitionerId: string) {

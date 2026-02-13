@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
 import { getEventById, isAdminAuthenticated, updateEvent } from "@/actions/admin";
+import { getPractitionerDropdownOptions } from "@/actions/practitioners";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { categoryConfig } from "@/lib/utils";
@@ -20,7 +21,10 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
     redirect("/admin");
   }
 
-  const event = await getEventById(id);
+  const [event, practitionerOptions] = await Promise.all([
+    getEventById(id),
+    getPractitionerDropdownOptions(),
+  ]);
 
   if (!event) {
     notFound();
@@ -29,6 +33,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
   async function handleUpdate(formData: FormData) {
     "use server";
     type Category = "yoga" | "music" | "ceremony" | "food" | "wellness" | "community" | "market" | "family" | "other";
+    const practitionerIdValue = formData.get("practitionerId") as string;
     const data = {
       title: formData.get("title") as string,
       description: (formData.get("description") as string) || null,
@@ -36,6 +41,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
       venueName: (formData.get("venueName") as string) || null,
       mapsUrl: (formData.get("mapsUrl") as string) || null,
       organizerName: (formData.get("organizerName") as string) || null,
+      practitionerId: practitionerIdValue || null,
       startTime: formData.get("startTime") as string,
       endTime: (formData.get("endTime") as string) || null,
       contactWhatsapp: (formData.get("contactWhatsapp") as string) || null,
@@ -96,6 +102,25 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Practitioner</label>
+              <select
+                name="practitionerId"
+                defaultValue={event.practitionerId || ""}
+                className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.9rem] outline-none focus:border-ocean transition-colors"
+              >
+                <option value="">— None —</option>
+                {practitionerOptions.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-text-lighter mt-1">
+                Link this event to a practitioner profile
+              </p>
             </div>
 
             <div>

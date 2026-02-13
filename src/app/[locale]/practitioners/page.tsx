@@ -9,6 +9,10 @@ export async function generateMetadata() {
   return {
     title: t("practitionersTitle"),
     description: t("practitionersDescription"),
+    openGraph: {
+      title: t("practitionersTitle"),
+      description: t("practitionersDescription"),
+    },
   };
 }
 

@@ -30,17 +30,11 @@ export type PractitionerDetail = {
   }[];
 };
 
-/** Get all approved practitioners for listing page */
-export async function getApprovedPractitioners(): Promise<PractitionerCard[]> {
-  const rows = await db
-    .select()
-    .from(practitioners)
-    .where(eq(practitioners.isApproved, true))
-    .orderBy(desc(practitioners.isFeatured), practitioners.name);
-
-  // Get service counts
-  const practitionerIds = rows.map((r) => r.id);
-  if (practitionerIds.length === 0) return [];
+/** Fetch service counts for a list of practitioner IDs */
+async function getServiceCountMap(
+  practitionerIds: string[]
+): Promise<Map<string, number>> {
+  if (practitionerIds.length === 0) return new Map();
 
   const serviceCounts = await db
     .select({
@@ -51,8 +45,14 @@ export async function getApprovedPractitioners(): Promise<PractitionerCard[]> {
     .where(sql`${services.practitionerId} IN (${sql.join(practitionerIds.map((id) => sql`${id}`), sql`, `)})`)
     .groupBy(services.practitionerId);
 
-  const countMap = new Map(serviceCounts.map((s) => [s.practitionerId, s.count]));
+  return new Map(serviceCounts.map((s) => [s.practitionerId, s.count]));
+}
 
+/** Map DB rows to PractitionerCard[] with service counts */
+function toPractitionerCards(
+  rows: (typeof practitioners.$inferSelect)[],
+  countMap: Map<string, number>
+): PractitionerCard[] {
   return rows.map((r) => ({
     id: r.id,
     name: r.name,
@@ -63,6 +63,20 @@ export async function getApprovedPractitioners(): Promise<PractitionerCard[]> {
     isFeatured: r.isFeatured,
     serviceCount: countMap.get(r.id) || 0,
   }));
+}
+
+/** Get all approved practitioners for listing page */
+export async function getApprovedPractitioners(): Promise<PractitionerCard[]> {
+  const rows = await db
+    .select()
+    .from(practitioners)
+    .where(eq(practitioners.isApproved, true))
+    .orderBy(desc(practitioners.isFeatured), practitioners.name);
+
+  if (rows.length === 0) return [];
+
+  const countMap = await getServiceCountMap(rows.map((r) => r.id));
+  return toPractitionerCards(rows, countMap);
 }
 
 /** Get practitioners filtered by category */
@@ -135,6 +149,48 @@ export async function getPractitionerForEvent(
     .limit(1);
 
   return p || null;
+}
+
+/** Get id/name pairs for dropdown selectors */
+export async function getPractitionerDropdownOptions(): Promise<
+  { id: string; name: string }[]
+> {
+  return db
+    .select({ id: practitioners.id, name: practitioners.name })
+    .from(practitioners)
+    .where(eq(practitioners.isApproved, true))
+    .orderBy(practitioners.name);
+}
+
+/** Get featured practitioners for homepage */
+export async function getFeaturedPractitioners(): Promise<PractitionerCard[]> {
+  const rows = await db
+    .select()
+    .from(practitioners)
+    .where(and(eq(practitioners.isApproved, true), eq(practitioners.isFeatured, true)))
+    .orderBy(practitioners.name)
+    .limit(6);
+
+  if (rows.length === 0) return [];
+
+  const countMap = await getServiceCountMap(rows.map((r) => r.id));
+  return toPractitionerCards(rows, countMap);
+}
+
+/** Get practitioners by venue name */
+export async function getPractitionersByVenue(
+  venueName: string
+): Promise<PractitionerCard[]> {
+  const rows = await db
+    .select()
+    .from(practitioners)
+    .where(and(eq(practitioners.isApproved, true), eq(practitioners.venueName, venueName)))
+    .orderBy(practitioners.name);
+
+  if (rows.length === 0) return [];
+
+  const countMap = await getServiceCountMap(rows.map((r) => r.id));
+  return toPractitionerCards(rows, countMap);
 }
 
 /** Search practitioners by name or bio */

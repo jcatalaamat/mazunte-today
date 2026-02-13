@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { ShareEvent } from "@/components/share-event";
 import { getTranslations } from "next-intl/server";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,
@@ -21,6 +21,12 @@ export async function generateMetadata({
   return {
     title: `${result.practitioner.name} · Mazunte Today`,
     description: result.practitioner.shortBio || `${result.practitioner.name} in Mazunte`,
+    openGraph: {
+      title: result.practitioner.name,
+      description: result.practitioner.shortBio || `${result.practitioner.name} in Mazunte`,
+      images: result.practitioner.profileImage ? [result.practitioner.profileImage] : [],
+      type: "profile",
+    },
   };
 }
 
@@ -230,6 +236,29 @@ export default async function PractitionerDetailPage({
               </div>
             </div>
           )}
+
+          {/* JSON-LD Structured Data */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Person",
+                name: practitioner.name,
+                description: practitioner.shortBio || practitioner.bio || undefined,
+                image: practitioner.profileImage || undefined,
+                url: `https://mazunte.today/en/practitioners/${practitioner.slug}`,
+                address: practitioner.venueName
+                  ? {
+                      "@type": "PostalAddress",
+                      addressLocality: "Mazunte",
+                      addressRegion: "Oaxaca",
+                      addressCountry: "MX",
+                    }
+                  : undefined,
+              }),
+            }}
+          />
 
           {/* Gallery */}
           {images.length > 0 && (

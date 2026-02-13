@@ -5,6 +5,7 @@ import Link from "next/link";
 import { categoryConfig, formatTime, isEventBoosted } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { LogoutButton } from "../logout-button";
+import { AdminNav } from "@/components/admin-nav";
 
 export const metadata = {
   title: "Manage Events · Mazunte Today",
@@ -33,23 +34,16 @@ export default async function AdminEventsPage() {
       <Header />
       <section className="px-6 py-12 sm:px-10">
         <div className="max-w-3xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-            <div>
-              <h1 className="font-serif text-2xl mb-1">Manage Events</h1>
-              <p className="text-text-soft text-sm">
-                {approvedEvents.length} approved event{approvedEvents.length !== 1 ? "s" : ""}
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href="/admin"
-                className="text-sm text-ocean hover:text-ocean/80 transition-colors"
-              >
-                ← Pending Events
-              </Link>
-              <LogoutButton />
-            </div>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="font-serif text-2xl">Manage Events</h1>
+            <LogoutButton />
           </div>
+
+          <AdminNav />
+
+          <p className="text-text-soft text-sm mb-6">
+            {approvedEvents.length} approved event{approvedEvents.length !== 1 ? "s" : ""}
+          </p>
 
           {approvedEvents.length === 0 ? (
             <div className="text-center py-16 text-text-lighter">
