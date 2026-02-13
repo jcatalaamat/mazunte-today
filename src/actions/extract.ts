@@ -38,7 +38,7 @@ Rules:
 - For WhatsApp numbers, include country code if visible (e.g. "+52 958 116 9947")
 - For Instagram, extract just the handle without @ (e.g. "mazuntetoday")
 - For URLs/links, extract any booking or registration links
-- For description, write a clean 1-2 sentence summary of the event (not the raw text)
+- For description, keep the original text as-is — preserve the voice, tone, emojis, and personality. Just clean up obvious formatting artifacts (extra whitespace, broken lines) but do NOT rewrite or summarize
 - For organizerName, extract the person or studio/business name hosting the event
 
 Respond ONLY with valid JSON, no markdown fences, no explanation.`;
@@ -140,7 +140,12 @@ export async function extractEventInfo(
 
     let parsed;
     try {
-      parsed = JSON.parse(textBlock.text);
+      let jsonText = textBlock.text.trim();
+      // Strip markdown code fences if Claude wraps the JSON
+      if (jsonText.startsWith("```")) {
+        jsonText = jsonText.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+      }
+      parsed = JSON.parse(jsonText);
     } catch {
       return { error: "Failed to parse extracted data." };
     }

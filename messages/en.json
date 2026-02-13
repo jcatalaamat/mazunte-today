@@ -93,7 +93,7 @@
     "uploading": "Uploading...",
     "clickToUpload": "Click to upload",
     "dragAndDrop": "or drag and drop",
-    "imageFormats": "PNG, JPG, WebP or GIF (max 4MB each) · {current}/{max} uploaded",
+    "imageFormats": "PNG, JPG, WebP, GIF or PDF (max 4MB each) · {current}/{max} uploaded",
     "maxImages": "Maximum {max} images allowed",
     "contact": "Contact (optional)",
     "whatsappPlaceholder": "+52 123 456 7890",

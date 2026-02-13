@@ -215,7 +215,7 @@ export function SubmitEventForm() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif"
+                accept="image/jpeg,image/png,image/webp,image/gif,application/pdf"
                 onChange={handleImageChange}
                 disabled={imageUploading}
                 multiple
@@ -498,7 +498,7 @@ export function SubmitEventForm() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif"
+                accept="image/jpeg,image/png,image/webp,image/gif,application/pdf"
                 onChange={handleImageChange}
                 disabled={imageUploading}
                 multiple

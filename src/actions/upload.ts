@@ -11,15 +11,15 @@ export async function uploadImage(formData: FormData): Promise<{ url: string } |
   }
 
   // Validate file type
-  const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "application/pdf"];
   if (!allowedTypes.includes(file.type)) {
-    return { error: "Invalid file type. Please upload a JPEG, PNG, WebP, or GIF image." };
+    return { error: "Invalid file type. Please upload a JPEG, PNG, WebP, GIF, or PDF." };
   }
 
   // Validate file size (max 4MB)
   const maxSize = 4 * 1024 * 1024;
   if (file.size > maxSize) {
-    return { error: "Image too large. Maximum size is 4MB." };
+    return { error: "File too large. Maximum size is 4MB." };
   }
 
   try {
