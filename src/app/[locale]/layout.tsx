@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 import { PostHogProvider } from "@/components/posthog-provider";
+import { ServiceWorkerRegister } from "@/components/sw-register";
 import "../globals.css";
 
 const instrumentSerif = Instrument_Serif({
@@ -66,12 +67,20 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <html lang={locale}>
+      <head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Mazunte Today" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        <meta name="theme-color" content="#2B6B7F" />
+      </head>
       <body
         className={`${instrumentSerif.variable} ${dmSans.variable} antialiased`}
       >
         <PostHogProvider>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </PostHogProvider>
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
