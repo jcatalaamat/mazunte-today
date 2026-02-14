@@ -3,9 +3,9 @@ import { getEventBySlug } from "@/actions/events";
 import { notFound } from "next/navigation";
 import { categoryConfig, formatTime, getDayOfWeek } from "@/lib/utils";
 import { Link } from "@/i18n/navigation";
-import Image from "next/image";
 import { AddToCalendar } from "@/components/add-to-calendar";
 import { ShareEvent } from "@/components/share-event";
+import { EventGallery } from "@/components/event-gallery";
 import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
@@ -55,34 +55,10 @@ export default async function EventPage({
             {t("backToEvents")}
           </Link>
 
-          {event.images && (event.images as string[]).length > 0 && (
-            <div className="mb-6">
-              <div className="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden">
-                <Image
-                  src={(event.images as string[])[0]}
-                  alt={event.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-
-              {(event.images as string[]).length > 1 && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
-                  {(event.images as string[]).slice(1).map((img, index) => (
-                    <div key={img} className="relative aspect-square rounded-lg overflow-hidden">
-                      <Image
-                        src={img}
-                        alt={`${event.title} - image ${index + 2}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+          <EventGallery
+            images={(event.images as string[]) || []}
+            title={event.title}
+          />
 
           <span className={`inline-block text-xs font-semibold uppercase tracking-wider px-2.5 py-1 rounded mb-4 ${cat.bgClass}`}>
             {cat.emoji} {tc(event.category)}
