@@ -3,6 +3,7 @@ import { getEventById, isAdminAuthenticated, updateEvent } from "@/actions/admin
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { categoryConfig } from "@/lib/utils";
+import { ImageManager } from "./image-manager";
 
 export const metadata = {
   title: "Edit Event · Mazunte Today",
@@ -41,6 +42,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
       contactWhatsapp: (formData.get("contactWhatsapp") as string) || null,
       contactInstagram: (formData.get("contactInstagram") as string) || null,
       contactLink: (formData.get("contactLink") as string) || null,
+      images: formData.getAll("images").filter(Boolean) as string[],
     };
 
     await updateEvent(id, data);
@@ -186,6 +188,8 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
                 className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.9rem] outline-none focus:border-ocean transition-colors"
               />
             </div>
+
+            <ImageManager initialImages={event.images || []} />
 
             <button
               type="submit"

@@ -36,12 +36,26 @@ export function SubmitEventForm() {
   const [imageError, setImageError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Confirm phase state (pre-filled from AI)
+  // Confirm phase state (pre-filled from AI, controlled to persist across re-renders)
   const [extractedData, setExtractedData] = useState<ExtractedEvent | null>(null);
   const [isRecurring, setIsRecurring] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState<PlaceResult | null>(null);
   const [checkedDays, setCheckedDays] = useState<string[]>([]);
 
+  // Controlled form field values (prevents loss on failed submission re-render)
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [organizerName, setOrganizerName] = useState("");
+  const [contactWhatsapp, setContactWhatsapp] = useState("");
+  const [contactInstagram, setContactInstagram] = useState("");
+  const [contactLink, setContactLink] = useState("");
+  const [recurrenceUntil, setRecurrenceUntil] = useState("");
+
+  const formRef = useRef<HTMLFormElement>(null);
   const t = useTranslations("submit");
   const tc = useTranslations("categories");
   const td = useTranslations("days");
@@ -109,6 +123,18 @@ export function SubmitEventForm() {
     setIsRecurring(result.data.isRecurring);
     setCheckedDays(result.data.recurrenceDays);
 
+    // Populate controlled form fields from extracted data
+    setTitle(result.data.title || "");
+    setCategory(result.data.category || "");
+    setDescription(result.data.description || "");
+    setDate(result.data.date || "");
+    setStartTime(result.data.startTime || "");
+    setEndTime(result.data.endTime || "");
+    setOrganizerName(result.data.organizerName || "");
+    setContactWhatsapp(result.data.contactWhatsapp || "");
+    setContactInstagram(result.data.contactInstagram || "");
+    setContactLink(result.data.contactLink || "");
+
     // Set up place data if resolved
     if (result.data.placeId && result.data.venueName) {
       setSelectedPlace({
@@ -134,7 +160,11 @@ export function SubmitEventForm() {
     if (state.success) {
       posthog.capture("event_submitted");
     }
-  }, [state.success]);
+    // Scroll to error summary when validation fails
+    if (state.message && !state.success && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [state.success, state.message]);
 
   // Success screen
   if (state.success) {
@@ -267,10 +297,17 @@ export function SubmitEventForm() {
         </p>
       </div>
 
-      <form action={formAction} className="space-y-6">
+      <form ref={formRef} action={formAction} className="space-y-6">
         {state.message && !state.success && (
           <div className="bg-coral/10 text-coral text-sm rounded-xl px-4 py-3">
-            {state.message}
+            <p className="font-medium">{state.message}</p>
+            {state.errors && (
+              <ul className="mt-2 space-y-0.5 text-xs list-disc list-inside">
+                {Object.values(state.errors).flat().map((err, i) => (
+                  <li key={i}>{err}</li>
+                ))}
+              </ul>
+            )}
           </div>
         )}
 
@@ -280,8 +317,9 @@ export function SubmitEventForm() {
           <input
             name="title"
             required
-            defaultValue={extractedData?.title || ""}
-            className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className={`w-full px-4 py-3 rounded-xl border-[1.5px] bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors ${state.errors?.title ? "border-coral" : "border-black/10"}`}
             placeholder={t("titlePlaceholder")}
           />
           {state.errors?.title && (
@@ -295,14 +333,18 @@ export function SubmitEventForm() {
           <select
             name="category"
             required
-            defaultValue={extractedData?.category || ""}
-            className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className={`w-full px-4 py-3 rounded-xl border-[1.5px] bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors ${state.errors?.category ? "border-coral" : "border-black/10"}`}
           >
             <option value="">{t("selectCategory")}</option>
             {categoryKeys.map((key) => (
               <option key={key} value={key}>{tc(key)}</option>
             ))}
           </select>
+          {state.errors?.category && (
+            <p className="text-coral text-xs mt-1">{state.errors.category[0]}</p>
+          )}
         </div>
 
         {/* Venue - Places Autocomplete */}
@@ -320,6 +362,9 @@ export function SubmitEventForm() {
           {selectedPlace && (
             <p className="text-xs text-text-lighter mt-1.5">{selectedPlace.address}</p>
           )}
+          {state.errors?.venueName && (
+            <p className="text-coral text-xs mt-1">{state.errors.venueName[0]}</p>
+          )}
         </div>
 
         {/* Description */}
@@ -328,7 +373,8 @@ export function SubmitEventForm() {
           <textarea
             name="description"
             rows={3}
-            defaultValue={extractedData?.description || ""}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors resize-none"
             placeholder={t("descriptionPlaceholder")}
           />
@@ -389,6 +435,8 @@ export function SubmitEventForm() {
               <input
                 name="recurrenceUntil"
                 type="date"
+                value={recurrenceUntil}
+                onChange={(e) => setRecurrenceUntil(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
               />
             </div>
@@ -400,8 +448,9 @@ export function SubmitEventForm() {
               name="date"
               type="date"
               required={!isRecurring}
-              defaultValue={extractedData?.date || ""}
-              className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className={`w-full px-4 py-3 rounded-xl border-[1.5px] bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors ${state.errors?.date ? "border-coral" : "border-black/10"}`}
             />
             {state.errors?.date && (
               <p className="text-coral text-xs mt-1">{state.errors.date[0]}</p>
@@ -417,16 +466,21 @@ export function SubmitEventForm() {
               name="startTime"
               type="time"
               required
-              defaultValue={extractedData?.startTime || ""}
-              className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              className={`w-full px-4 py-3 rounded-xl border-[1.5px] bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors ${state.errors?.startTime ? "border-coral" : "border-black/10"}`}
             />
+            {state.errors?.startTime && (
+              <p className="text-coral text-xs mt-1">{state.errors.startTime[0]}</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium mb-1.5">{t("endTime")}</label>
             <input
               name="endTime"
               type="time"
-              defaultValue={extractedData?.endTime || ""}
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
             />
             {state.errors?.endTime && (
@@ -441,10 +495,14 @@ export function SubmitEventForm() {
           <input
             name="organizerName"
             required
-            defaultValue={extractedData?.organizerName || ""}
-            className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
+            value={organizerName}
+            onChange={(e) => setOrganizerName(e.target.value)}
+            className={`w-full px-4 py-3 rounded-xl border-[1.5px] bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors ${state.errors?.organizerName ? "border-coral" : "border-black/10"}`}
             placeholder={t("organizerPlaceholder")}
           />
+          {state.errors?.organizerName && (
+            <p className="text-coral text-xs mt-1">{state.errors.organizerName[0]}</p>
+          )}
         </div>
 
         {/* Images (already uploaded in phase 1) */}
@@ -519,7 +577,8 @@ export function SubmitEventForm() {
               <input
                 name="contactWhatsapp"
                 type="tel"
-                defaultValue={extractedData?.contactWhatsapp || ""}
+                value={contactWhatsapp}
+                onChange={(e) => setContactWhatsapp(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
                 placeholder={t("whatsappPlaceholder")}
               />
@@ -527,7 +586,8 @@ export function SubmitEventForm() {
             </div>
             <input
               name="contactInstagram"
-              defaultValue={extractedData?.contactInstagram || ""}
+              value={contactInstagram}
+              onChange={(e) => setContactInstagram(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
               placeholder={t("instagramPlaceholder")}
             />
@@ -535,7 +595,8 @@ export function SubmitEventForm() {
           <input
             name="contactLink"
             type="url"
-            defaultValue={extractedData?.contactLink || ""}
+            value={contactLink}
+            onChange={(e) => setContactLink(e.target.value)}
             className="w-full px-4 py-3 rounded-xl border-[1.5px] border-black/10 bg-cream text-[0.88rem] outline-none focus:border-ocean transition-colors"
             placeholder={t("linkPlaceholder")}
           />

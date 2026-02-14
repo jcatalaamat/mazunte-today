@@ -121,6 +121,7 @@ export async function updateEvent(
     contactWhatsapp?: string | null;
     contactInstagram?: string | null;
     contactLink?: string | null;
+    images?: string[];
   }
 ) {
   await db

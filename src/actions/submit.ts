@@ -8,7 +8,9 @@ import { z } from "zod";
 const submitEventSchema = z.object({
   title: z.string().min(2, "Title is required"),
   description: z.string().optional(),
-  category: z.enum(["yoga", "music", "ceremony", "food", "wellness", "community", "market", "family", "other"]),
+  category: z.enum(["yoga", "music", "ceremony", "food", "wellness", "community", "market", "family", "other"], {
+    errorMap: () => ({ message: "Please select a category" }),
+  }),
   venueName: z.string().min(1, "Venue name is required"),
   placeId: z.string().optional(),
   mapsUrl: z.string().optional(),
@@ -25,7 +27,7 @@ const submitEventSchema = z.object({
   images: z.array(z.string().url()).optional(),
 }).refine((data) => {
   // For non-recurring events, date is required
-  if (!data.isRecurring && !data.date) {
+  if (!data.isRecurring && (!data.date || data.date.length === 0)) {
     return false;
   }
   return true;
@@ -34,7 +36,7 @@ const submitEventSchema = z.object({
   path: ["date"],
 }).refine((data) => {
   // Date must not be in the past (for non-recurring events)
-  if (!data.isRecurring && data.date) {
+  if (!data.isRecurring && data.date && data.date.length > 0) {
     const today = getMazunteToday();
     if (data.date < today) {
       return false;
@@ -75,22 +77,22 @@ export async function submitEvent(
   formData: FormData
 ): Promise<SubmitEventState> {
   const raw = {
-    title: formData.get("title") as string,
-    description: formData.get("description") as string,
-    category: formData.get("category") as string,
-    venueName: formData.get("venueName") as string,
-    placeId: formData.get("placeId") as string,
-    mapsUrl: formData.get("mapsUrl") as string,
-    date: formData.get("date") as string,
-    startTime: formData.get("startTime") as string,
-    endTime: formData.get("endTime") as string,
+    title: (formData.get("title") as string) || "",
+    description: (formData.get("description") as string) || "",
+    category: (formData.get("category") as string) || "",
+    venueName: (formData.get("venueName") as string) || "",
+    placeId: (formData.get("placeId") as string) || "",
+    mapsUrl: (formData.get("mapsUrl") as string) || "",
+    date: (formData.get("date") as string) || "",
+    startTime: (formData.get("startTime") as string) || "",
+    endTime: (formData.get("endTime") as string) || "",
     isRecurring: formData.get("isRecurring") === "true",
     recurrenceDays: formData.getAll("recurrenceDays") as string[],
-    recurrenceUntil: formData.get("recurrenceUntil") as string,
-    organizerName: formData.get("organizerName") as string,
-    contactWhatsapp: formData.get("contactWhatsapp") as string,
-    contactInstagram: formData.get("contactInstagram") as string,
-    contactLink: formData.get("contactLink") as string,
+    recurrenceUntil: (formData.get("recurrenceUntil") as string) || "",
+    organizerName: (formData.get("organizerName") as string) || "",
+    contactWhatsapp: (formData.get("contactWhatsapp") as string) || "",
+    contactInstagram: (formData.get("contactInstagram") as string) || "",
+    contactLink: (formData.get("contactLink") as string) || "",
     images: formData.getAll("images").filter(Boolean) as string[],
   };
 
